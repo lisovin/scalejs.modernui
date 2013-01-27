@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{CBB3D24D-A50D-45B2-9F11-0907BF96DF42}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <OutputPath>build</OutputPath>
+    <JSLintSkip>\Scripts\</JSLintSkip>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="css\modern-responsive.css" />
+    <Content Include="css\modern.css" />
+    <Content Include="css\panorama.css" />
+    <Content Include="css\theme-dark.css" />
+    <Content Include="Properties\build.rjs" />
+    <Content Include="Properties\scalejs.modernui.nuspec" />
+    <Content Include="scalejs.modernui.js" />
+    <Content Include="scalejs.modernui\panorama.html" />
+    <Content Include="scalejs.modernui\panorama.js" />
+    <Content Include="Scripts\knockout-classBindingProvider.js" />
+    <Content Include="Scripts\knockout-classBindingProvider.min.js" />
+    <Content Include="Scripts\scalejs.mvvm-0.1.2.js" />
+    <Content Include="Scripts\scalejs.mvvm-0.1.2.min.js" />
+    <Content Include="scalejs.modernui\start-menu.js" />
+    <Content Include="Scripts\text.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\jquery-1.9.0.intellisense.js" />
+    <Content Include="Scripts\jquery-1.9.0.js" />
+    <Content Include="Scripts\jquery-1.9.0.min.js" />
+    <Content Include="Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout.mapping-latest.debug.js" />
+    <Content Include="Scripts\knockout.mapping-latest.js" />
+    <Content Include="Scripts\scalejs-0.1.13.js" />
+    <Content Include="Scripts\scalejs-0.1.13.min.js" />
+    <Content Include="tools\install.ps1" />
+    <Content Include="tools\uninstall.ps1" />
+    <Content Include="bootstrapper.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Scripts\jquery-1.9.0.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <ScalejsProjectType>Extension</ScalejsProjectType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>scalejs.modernui</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" />
+  <Import Project="$(SolutionDir)\.scalejs\Scalejs.targets" />
+</Project>

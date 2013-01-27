@@ -1,0 +1,10 @@
+﻿.page.panorama .page-header .page-header-content
+{
+    height: 60px;
+    min-height: 60px;
+}
+
+.page.panorama.fixed-header .page-region 
+{
+  padding-top: 40px;
+}

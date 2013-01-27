@@ -1,0 +1,8 @@
+﻿({
+	mainConfigFile: '../bootstrapper.js',
+    include: 'scalejs.modernui',
+    exclude: [
+        'scalejs!core',
+		'text'
+    ]
+})
