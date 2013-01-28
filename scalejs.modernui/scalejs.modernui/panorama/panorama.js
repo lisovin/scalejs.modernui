@@ -2,24 +2,32 @@
 /*global console,define*/
 /*jslint unparam: true*/define([
     'scalejs!core',
+    '../utils',
+    './panoramaBindings',
     'text!./panorama.html',
+    'text!./panorama.css',
     'jQuery',
     'knockout',
-    // ensure load
-    './start-menu'
+    './tilesLayout'
 ], function (
     core,
+    utils,
+    panoramaBindings,
     panoramaTemplate,
+    panoramaCss,
     $,
     ko,
-    startMenu
+    tilesLayout
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
-    //var unwrap = ko.utils.unwrapObservable;
 
-    function layoutPanorama() {
-        startMenu.tuneUpStartMenu();
+    var addCss = utils.addCss;
+
+    addCss('panorama', panoramaCss);
+
+    function layoutPanorama(elements) {
+        tilesLayout.reset(elements);
     }
 
     function wrapValueAccessor(valueAccessor) {
@@ -29,7 +37,7 @@
             return {
                 name: 'scalejs_modernui_page_template',
                 data: value,
-                afterRender: startMenu.reset
+                afterRender: layoutPanorama
             };
         };
     }
@@ -69,8 +77,11 @@
     }
 
     return {
-        init: init,
-        update: update
+        bindings: panoramaBindings,
+        bindingHandler: {
+            init: init,
+            update: update
+        }
     };
 });
 /*jslint unparam: false*/

@@ -11,18 +11,20 @@
   <ItemGroup>
     <Content Include="css\modern-responsive.css" />
     <Content Include="css\modern.css" />
-    <Content Include="css\panorama.css" />
+    <Content Include="scalejs.modernui\utils.js" />
+    <Content Include="scalejs.modernui\panorama\panoramaBindings.js" />
+    <Content Include="scalejs.modernui\panorama\panorama.css" />
     <Content Include="css\theme-dark.css" />
     <Content Include="Properties\build.rjs" />
     <Content Include="Properties\scalejs.modernui.nuspec" />
     <Content Include="scalejs.modernui.js" />
-    <Content Include="scalejs.modernui\panorama.html" />
-    <Content Include="scalejs.modernui\panorama.js" />
+    <Content Include="scalejs.modernui\panorama\panorama.html" />
+    <Content Include="scalejs.modernui\panorama\panorama.js" />
     <Content Include="Scripts\knockout-classBindingProvider.js" />
     <Content Include="Scripts\knockout-classBindingProvider.min.js" />
     <Content Include="Scripts\scalejs.mvvm-0.1.2.js" />
     <Content Include="Scripts\scalejs.mvvm-0.1.2.min.js" />
-    <Content Include="scalejs.modernui\start-menu.js" />
+    <Content Include="scalejs.modernui\panorama\tilesLayout.js" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\jquery-1.9.0.intellisense.js" />
@@ -42,6 +44,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <ScalejsProjectType>Extension</ScalejsProjectType>
   </PropertyGroup>

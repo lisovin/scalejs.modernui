@@ -1,12 +1,16 @@
 /// <reference path="scripts/_references.js" />
 /*global define,document*/
 define([
-    'scalejs.modernui/panorama',
+    'scalejs.modernui/utils',
+    'scalejs.modernui/panorama/panorama',
+    'text!css/modern.css',
     'jQuery',
     'knockout',
     'knockout.mapping'
 ], function (
+    utils,
     panorama,
+    modernCss,
     $,
     ko
 ) {
@@ -14,56 +18,14 @@ define([
 	/// <param name="ko" value="window.ko"></param> 
     'use strict';
 
-    function addCss(cssUrl) {
-        if (document.createStyleSheet) {
-            document.createStyleSheet(cssUrl, 0);
-        } else {
-            $('head').prepend('<link rel="stylesheet" type="text/css" href="' + cssUrl + '" />');
-        }
-    }
+    var addCss = utils.addCss;
 
-    // Add stylesheets in the opposite order since we are using prepend to allow
-    // the app overwrite styles
-    addCss('css/panorama.css');
-    addCss('css/theme-dark.css');
-    addCss('css/modern.css');
+    addCss('modern', modernCss);
 
     function buildCore(core) {
-        var bindings = {
-            'panorama-title': function () {
-                return {
-                    text: this.title
-                };
-            },
-            'panorama-pages': function () {
-                return {
-                    foreach: this.pages
-                };
-            },/*
-            'panorama-page': function () {
-                return {
-                    style: {
-                        maxWidth: '1000'
-                    }
-                };
-            },*/
-            'panorama-page-content': function () {
-                return {
-                    template: {
-                        name: this.template
-                    }
-                };
-            },
-            'panorama-page-title': function () {
-                return {
-                    text: this.title
-                };
-            }
-        };
+        core.mvvm.registerBindings(panorama.bindings);
 
-        core.mvvm.registerBindings(bindings);
-
-        ko.bindingHandlers.panorama = panorama;
+        ko.bindingHandlers.panorama = panorama.bindingHandler;
     }
 
     return {

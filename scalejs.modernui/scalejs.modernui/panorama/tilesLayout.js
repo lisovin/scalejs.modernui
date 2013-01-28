@@ -1,23 +1,4 @@
 /*global define,window,document,clearTimeout,setTimeout*/
-/**
- * use this plugin if you want to make tiled menu like windows 8 start menu
- * what plugin needs for?
- * it needs for following elements structure
- *  <div class="page">
- *      <div class="tiles">
- *          <div class="tile-group">
- *              <div class="tile"></div>
- *              <div class="tile"></div>
- *              .........
- *              <div class="tile"></div>
- *          </div>
- *      </div>
- *  </div>
- *  
- * if you do some changes, for example, move tile from one group, you have to use
- * $('.tiles').trigger('changed')
- * and all tiles will placed to own place
- */
 define(['jQuery'], function ($) {
     'use strict';
 
@@ -133,16 +114,18 @@ define(['jQuery'], function ($) {
         });
     }
 
-    function reset(element) {
-        $startMenu = $(element).find('.tiles');
+    function init() {
         subscribeScroll();
-        setPageWidth();
-        tuneUpStartMenu();
         subscribeResize();
     }
 
+    function reset(element) {
+        $startMenu = $(element).find('.tiles');
+        setPageWidth();
+        tuneUpStartMenu();
+    }
+
     return {
-        reset: reset,
-        tuneUpStartMenu: tuneUpStartMenu
+        reset: reset
     };
 });
