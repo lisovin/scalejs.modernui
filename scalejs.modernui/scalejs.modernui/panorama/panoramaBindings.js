@@ -35,6 +35,11 @@ define(function () {
             return {
                 'with': this.selectedPage
             }
+        },
+        'back-button' : function (data) {
+            return {
+                'click': data.$parent.deselectPage
+            };
         }
     };
 

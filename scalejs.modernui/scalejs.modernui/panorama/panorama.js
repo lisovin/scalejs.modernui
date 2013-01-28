@@ -41,6 +41,10 @@
             selectedPage(page);
         }
 
+        function deselectPage() {
+            selectedPage(undefined);
+        }
+
         function templateSelector() {
             return has(selectedPage()) ? 'scalejs_panorama_page_template' : 'scalejs_panorama_template';
         }
@@ -51,7 +55,8 @@
 
                 value = merge(value, { 
                     selectedPage: selectedPage,
-                    selectPage: selectPage 
+                    selectPage: selectPage,
+                    deselectPage: deselectPage
                 });
 
                 return {
