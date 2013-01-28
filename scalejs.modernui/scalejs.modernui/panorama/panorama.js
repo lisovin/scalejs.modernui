@@ -26,12 +26,16 @@
         merge = core.object.merge,
         has = core.object.has,
         observable = ko.observable,
-        computed = ko.computed;
+        computed = ko.computed,
+        isObservable = ko.isObservable,
+        unwrap = ko.utils.unwrapObservable;
 
     addCss('panorama', panoramaCss);
 
     function panorama() {
-        var selectedPage = observable();
+        var selectedPage = observable(),
+            options = observable(),
+            panoramaData;
 
         function layoutPanorama(elements) {
             tilesLayout.reset(elements);
@@ -39,29 +43,47 @@
 
         function selectPage(page) {
             selectedPage(page);
+            if (isObservable(page.isSelected)) {
+                page.isSelected(true);
+            }
         }
 
         function deselectPage() {
+            var page = selectedPage();
+            if (has(page) && isObservable(page.isSelected)) {
+                page.isSelected(false);
+            }
+
             selectedPage(undefined);
         }
 
-        function templateSelector() {
-            return has(selectedPage()) ? 'scalejs_panorama_page_template' : 'scalejs_panorama_template';
-        }
+        panoramaData = computed(function () {
+            var opts = options(),
+                page = selectedPage(),
+                base = page || opts,
+                data = merge(base, {
+                    selectedPage: selectedPage,
+                    selectPage: selectPage,
+                    deselectPage: deselectPage,
+                    backButtonVisible: has(page)
+                });
+            // add page.pages to trackable observable so that tiles layout recalculate
+            // when pages observable changes
+            if (has(page)) {
+                unwrap(page.pages);
+            }
+
+            return data;
+        });
 
         function wrapValueAccessor(valueAccessor) {
             return function () {
                 var value = valueAccessor();
-
-                value = merge(value, { 
-                    selectedPage: selectedPage,
-                    selectPage: selectPage,
-                    deselectPage: deselectPage
-                });
+                options(value);
 
                 return {
-                    name: templateSelector,
-                    data: value,
+                    name: 'scalejs_panorama_template',
+                    data: panoramaData,
                     afterRender: layoutPanorama
                 };
             };
@@ -92,6 +114,8 @@
         bindingContext
     ) {
         var panorama = ko.utils.domData.get(element, 'panorama');
+
+        tilesLayout.reset(element);
 
         return ko.bindingHandlers.template.update(
             element,

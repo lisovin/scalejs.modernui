@@ -27,18 +27,21 @@ define(function () {
             };
         },
         'selectable': function (data) {
-            return {
-                click: data.$parent.selectPage
-            };
+            if (this.isSelectable) {
+                return {
+                    click: this.isSelectable ? data.$parent.selectPage : undefined
+                };
+            }
         },
         'selected-page' : function () {
             return {
                 'with': this.selectedPage
-            }
+            };
         },
         'back-button' : function (data) {
             return {
-                'click': data.$parent.deselectPage
+                'click': data.$data.deselectPage,
+                'visible': data.$data.backButtonVisible
             };
         }
     };

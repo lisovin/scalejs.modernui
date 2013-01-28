@@ -58,6 +58,7 @@ define(['jQuery'], function ($) {
                 groupHeight;
 
             if ($tiles.length === 0) {
+                // if no tiles set max-width to "optimal" width
                 return;
             }
             // finding min width according to the widest tile
