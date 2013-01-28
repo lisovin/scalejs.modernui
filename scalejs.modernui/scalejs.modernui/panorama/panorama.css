@@ -8,3 +8,13 @@
 {
   padding-top: 40px;
 }
+
+.panorama .title
+{
+    text-transform:uppercase;
+}
+
+.panorama .subtitle
+{
+    text-transform:uppercase;
+}

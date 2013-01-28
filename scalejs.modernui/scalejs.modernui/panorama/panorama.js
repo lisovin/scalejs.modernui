@@ -22,23 +22,48 @@
     /// <param name="ko" value="window.ko"/>
     'use strict';
 
-    var addCss = utils.addCss;
+    var addCss = utils.addCss,
+        merge = core.object.merge,
+        has = core.object.has,
+        observable = ko.observable,
+        computed = ko.computed;
 
     addCss('panorama', panoramaCss);
 
-    function layoutPanorama(elements) {
-        tilesLayout.reset(elements);
-    }
+    function panorama() {
+        var selectedPage = observable();
 
-    function wrapValueAccessor(valueAccessor) {
-        return function () {
-            var value = valueAccessor();
+        function layoutPanorama(elements) {
+            tilesLayout.reset(elements);
+        }
 
-            return {
-                name: 'scalejs_modernui_page_template',
-                data: value,
-                afterRender: layoutPanorama
+        function selectPage(page) {
+            selectedPage(page);
+        }
+
+        function templateSelector() {
+            return has(selectedPage()) ? 'scalejs_panorama_page_template' : 'scalejs_panorama_template';
+        }
+
+        function wrapValueAccessor(valueAccessor) {
+            return function () {
+                var value = valueAccessor();
+
+                value = merge(value, { 
+                    selectedPage: selectedPage,
+                    selectPage: selectPage 
+                });
+
+                return {
+                    name: templateSelector,
+                    data: value,
+                    afterRender: layoutPanorama
+                };
             };
+        }
+
+        return {
+            wrapValueAccessor: wrapValueAccessor
         };
     }
 
@@ -47,17 +72,11 @@
             $('#scalejs-templates').append(panoramaTemplate);
         }
 
-        var result = ko.bindingHandlers.template.init(
-            element,
-            wrapValueAccessor(valueAccessor),
-            allBindingsAccessor,
-            viewModel,
-            bindingContext
-        );
+        var myPanorama = panorama();
 
-        //startMenu.reset(element);
+        ko.utils.domData.set(element, 'panorama', myPanorama);
 
-        return result;
+        return { 'controlsDescendantBindings' : true };
     }
 
     function update(
@@ -67,9 +86,11 @@
         viewModel,
         bindingContext
     ) {
+        var panorama = ko.utils.domData.get(element, 'panorama');
+
         return ko.bindingHandlers.template.update(
             element,
-            wrapValueAccessor(valueAccessor),
+            panorama.wrapValueAccessor(valueAccessor),
             allBindingsAccessor,
             viewModel,
             bindingContext

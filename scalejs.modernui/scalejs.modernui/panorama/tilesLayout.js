@@ -125,6 +125,8 @@ define(['jQuery'], function ($) {
         tuneUpStartMenu();
     }
 
+    init();
+
     return {
         reset: reset
     };

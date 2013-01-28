@@ -1,15 +1,15 @@
-﻿<div id="scalejs_modernui_page_template">
+﻿<div id="scalejs_panorama_template">
     <div class="panorama page secondary fixed-header">
         <div class="page-header">
             <div class="page-header-content">
-                <h2><span data-class="panorama-title" /></h2>
+                <h2 class="title" data-class="title" /></h2>
             </div>
         </div>
         <div class="page-region">
             <div class="page-region-content tiles">
                 <!-- ko class: panorama-pages -->
                 <div class="tile-group tile-drag" style="width: auto"> 
-                    <div><h3><span data-class="panorama-page-title"></span></h3></div>
+                    <h3 class="subtitle" data-class="title selectable"></h3>
                     <!-- ko class: panorama-page-content -->
                     <!-- /ko -->
                 </div>
@@ -17,4 +17,21 @@
             </div>
         </div>
     </div> 
+</div>
+
+<div id="scalejs_panorama_page_template">
+    <div class="panorama page secondary fixed-header" data-class="selected-page">
+        <div class="page-header">
+            <div class="page-header-content">
+                <h2 class="title" data-class="title"></h2>
+                <div class="back-button big page-back"></div>
+            </div>
+        </div>
+        <div class="page-region">
+            <div class="page-region-content">
+                <h3 class="subtitle" data-class="subtitle"></h3>
+                <div>This is the selected page!</div>
+            </div>
+        </div>
+    </div>
 </div>

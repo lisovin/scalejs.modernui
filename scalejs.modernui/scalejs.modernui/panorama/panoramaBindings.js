@@ -3,10 +3,15 @@
 define(function () {
     'use strict';
 
-     return {
-        'panorama-title': function () {
+    return {
+        'title': function () {
             return {
                 text: this.title
+            };
+        },
+        'subtitle': function () {
+            return {
+                text: 'My subtitle'
             };
         },
         'panorama-pages': function () {
@@ -21,10 +26,15 @@ define(function () {
                 }
             };
         },
-        'panorama-page-title': function () {
+        'selectable': function (data) {
             return {
-                text: this.title
+                click: data.$parent.selectPage
             };
+        },
+        'selected-page' : function () {
+            return {
+                'with': this.selectedPage
+            }
         }
     };
 
