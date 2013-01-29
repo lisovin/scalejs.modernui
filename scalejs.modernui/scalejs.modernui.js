@@ -2,16 +2,14 @@
 /*global define,document*/
 define([
     'scalejs.modernui/utils',
-    'scalejs.modernui/panorama/panorama',
+    'scalejs.modernui/panorama/panoramaBindingHandler',
     'text!css/modern.css',
-    'jQuery',
     'knockout',
     'knockout.mapping'
 ], function (
     utils,
     panorama,
     modernCss,
-    $,
     ko
 ) {
 	/// <param name="$" value="window.$"/>

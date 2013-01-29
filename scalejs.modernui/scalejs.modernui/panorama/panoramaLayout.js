@@ -120,15 +120,22 @@ define(['jQuery'], function ($) {
         subscribeResize();
     }
 
-    function reset(element) {
-        $startMenu = $(element).find('.tiles');
+    function doLayout() {
         setPageWidth();
         tuneUpStartMenu();
+        // To preven flickering panorama binding will render the content 'hidden'.
+        // Once layout is complete everything should be made visible.
+        $startMenu.css('visibility', 'visible');
+    }
+
+    function reset(element) {
+        $startMenu = $(element).find('.tiles');
     }
 
     init();
 
     return {
-        reset: reset
+        reset: reset,
+        doLayout: doLayout
     };
 });

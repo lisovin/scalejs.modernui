@@ -1,138 +1,70 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define*/
 /*jslint unparam: true*/define([
+    './panoramaPage',
     'scalejs!core',
-    '../utils',
-    './panoramaBindings',
-    'text!./panorama.html',
-    'text!./panorama.css',
-    'jQuery',
-    'knockout',
-    './tilesLayout'
+    'knockout'
 ], function (
+    panoramaPage,
     core,
-    utils,
-    panoramaBindings,
-    panoramaTemplate,
-    panoramaCss,
-    $,
-    ko,
-    tilesLayout
+    ko
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
 
-    var addCss = utils.addCss,
-        merge = core.object.merge,
-        has = core.object.has,
-        observable = ko.observable,
-        computed = ko.computed,
-        isObservable = ko.isObservable,
-        unwrap = ko.utils.unwrapObservable;
+    var merge = core.object.merge,
+        has = core.object.has;
+        //map = core.array.map,
+        //observable = ko.observable,
+        //computed = ko.computed,
+        //isObservable = ko.isObservable,
+        //unwrap = ko.utils.unwrapObservable
 
-    addCss('panorama', panoramaCss);
+    function panorama(options, dataContext, previous) {
+        var backButtonVisible = has(previous),
+            thisPage = panoramaPage(merge(options, {isSelectable: true})),
+            self;
 
-    function panorama() {
-        var selectedPage = observable(),
-            options = observable(),
-            panoramaData;
-
-        function layoutPanorama(elements) {
-            tilesLayout.reset(elements);
-        }
-
-        function selectPage(page) {
-            selectedPage(page);
-            if (isObservable(page.isSelected)) {
-                page.isSelected(true);
+        function goToPage(page) {
+            var newPanorama;
+            if (has(page.pages)) {
+                newPanorama = panorama(page, dataContext, self);
+                dataContext(newPanorama);
             }
         }
 
-        function deselectPage() {
-            var page = selectedPage();
-            if (has(page) && isObservable(page.isSelected)) {
-                page.isSelected(false);
+        function goBack() {
+            if (has(previous)) {
+                dataContext(previous);
             }
-
-            selectedPage(undefined);
         }
-
-        panoramaData = computed(function () {
+        /*
+        computed(function () {
             var opts = options(),
                 page = selectedPage(),
                 base = page || opts,
-                data = merge(base, {
-                    selectedPage: selectedPage,
-                    selectPage: selectPage,
-                    deselectPage: deselectPage,
-                    backButtonVisible: has(page)
+                actualPages = has(base, 'pages') ? unwrap(base.pages) : undefined,
+                pages = has(actualPages) ? map(actualPages, panoramaPage) : [],
+                panorama = merge(base, {
                 });
-            // add page.pages to trackable observable so that tiles layout recalculate
-            // when pages observable changes
-            if (has(page)) {
-                unwrap(page.pages);
-            }
 
-            return data;
-        });
+            return panorama;
+        });*/
 
-        function wrapValueAccessor(valueAccessor) {
-            return function () {
-                var value = valueAccessor();
-                options(value);
+        thisPage.isSelected(true);
 
-                return {
-                    name: 'scalejs_panorama_template',
-                    data: panoramaData,
-                    afterRender: layoutPanorama
-                };
-            };
-        }
-
-        return {
-            wrapValueAccessor: wrapValueAccessor
+        self = {
+            title: options.title,
+            goToPage: goToPage,
+            goBack: goBack,
+            backButtonVisible: backButtonVisible,
+            pages: thisPage.pages
         };
+
+        return self;
     }
 
-    function init(        element,        valueAccessor,        allBindingsAccessor,        viewModel,        bindingContext    ) {
-        if ($('#scalejs_modernui_page_template').length === 0) {
-            $('#scalejs-templates').append(panoramaTemplate);
-        }
-
-        var myPanorama = panorama();
-
-        ko.utils.domData.set(element, 'panorama', myPanorama);
-
-        return { 'controlsDescendantBindings' : true };
-    }
-
-    function update(
-        element,
-        valueAccessor,
-        allBindingsAccessor,
-        viewModel,
-        bindingContext
-    ) {
-        var panorama = ko.utils.domData.get(element, 'panorama');
-
-        tilesLayout.reset(element);
-
-        return ko.bindingHandlers.template.update(
-            element,
-            panorama.wrapValueAccessor(valueAccessor),
-            allBindingsAccessor,
-            viewModel,
-            bindingContext
-        );
-    }
-
-    return {
-        bindings: panoramaBindings,
-        bindingHandler: {
-            init: init,
-            update: update
-        }
-    };
+    return panorama;
 });
 /*jslint unparam: false*/
 

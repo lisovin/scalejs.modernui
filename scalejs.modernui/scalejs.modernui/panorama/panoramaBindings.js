@@ -27,11 +27,9 @@ define(function () {
             };
         },
         'selectable': function (data) {
-            if (this.isSelectable) {
-                return {
-                    click: this.isSelectable ? data.$parent.selectPage : undefined
-                };
-            }
+            return {
+                click: data.$parent.goToPage
+            };
         },
         'selected-page' : function () {
             return {
@@ -40,8 +38,13 @@ define(function () {
         },
         'back-button' : function (data) {
             return {
-                'click': data.$data.deselectPage,
+                'click': data.$data.goBack,
                 'visible': data.$data.backButtonVisible
+            };
+        },
+        'panorama-page-default-content': function () {
+            return {
+                text: this
             };
         }
     };

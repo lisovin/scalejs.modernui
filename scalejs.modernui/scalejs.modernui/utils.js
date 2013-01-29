@@ -1,6 +1,6 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define*/
-define(function () {
+define(['jQuery'], function ($) {
     'use strict';
 
     function addCss(name, css) {
@@ -12,6 +12,6 @@ define(function () {
 
     return {
         addCss: addCss
-    }
+    };
 });
 

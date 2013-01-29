@@ -11,6 +11,8 @@
   <ItemGroup>
     <Content Include="css\modern-responsive.css" />
     <Content Include="css\modern.css" />
+    <Content Include="scalejs.modernui\panorama\panorama.js" />
+    <Content Include="scalejs.modernui\panorama\panoramaPage.js" />
     <Content Include="scalejs.modernui\utils.js" />
     <Content Include="scalejs.modernui\panorama\panoramaBindings.js" />
     <Content Include="scalejs.modernui\panorama\panorama.css" />
@@ -19,12 +21,12 @@
     <Content Include="Properties\scalejs.modernui.nuspec" />
     <Content Include="scalejs.modernui.js" />
     <Content Include="scalejs.modernui\panorama\panorama.html" />
-    <Content Include="scalejs.modernui\panorama\panorama.js" />
+    <Content Include="scalejs.modernui\panorama\panoramaBindingHandler.js" />
     <Content Include="Scripts\knockout-classBindingProvider.js" />
     <Content Include="Scripts\knockout-classBindingProvider.min.js" />
     <Content Include="Scripts\scalejs.mvvm-0.1.2.js" />
     <Content Include="Scripts\scalejs.mvvm-0.1.2.min.js" />
-    <Content Include="scalejs.modernui\panorama\tilesLayout.js" />
+    <Content Include="scalejs.modernui\panorama\panoramaLayout.js" />
     <Content Include="Scripts\text.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\jquery-1.9.0.intellisense.js" />
