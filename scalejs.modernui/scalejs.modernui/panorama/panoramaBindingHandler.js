@@ -1,6 +1,7 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define,setTimeout*/
 /*jslint unparam: true*/define([
+    'scalejs!core',
     './panorama',
     './panoramaBindings',
     './panoramaLayout',
@@ -10,6 +11,7 @@
     'jQuery',
     'knockout'
 ], function (
+    core,
     panorama,
     panoramaBindings,
     panoramaLayout,
@@ -59,8 +61,11 @@
     }
 
     function init(        element,        valueAccessor,        allBindingsAccessor,        viewModel,        bindingContext    ) {
+        var appendTemplate = core.mvvm.appendTemplate;
+
         if ($('#scalejs_modernui_page_template').length === 0) {
-            $('#scalejs-templates').append(panoramaTemplate);
+            appendTemplate(panoramaTemplate);
+            //$('#scalejs-templates').append(panoramaTemplate);
         }
 
         return { 'controlsDescendantBindings' : true };
