@@ -1,29 +1,22 @@
 /// <reference path="scripts/_references.js" />
 /*global define,document*/
 define([
-    'scalejs.modernui/utils',
     'scalejs.modernui/panorama/panoramaBindingHandler',
-    'text!css/modern.css',
     'knockout',
     'knockout.mapping'
 ], function (
-    utils,
-    panorama,
-    modernCss,
+    panoramaBindingHandler,
     ko
 ) {
 	/// <param name="$" value="window.$"/>
 	/// <param name="ko" value="window.ko"></param> 
     'use strict';
 
-    var addCss = utils.addCss;
-
-    addCss('modern', modernCss);
-
     function buildCore(core) {
-        core.mvvm.registerBindings(panorama.bindings);
+        var bindingHandler = panoramaBindingHandler(core);
 
-        ko.bindingHandlers.panorama = panorama.bindingHandler;
+        ko.bindingHandlers.panorama = bindingHandler;
+        ko.virtualElements.allowedBindings.panorama = true;
     }
 
     return {

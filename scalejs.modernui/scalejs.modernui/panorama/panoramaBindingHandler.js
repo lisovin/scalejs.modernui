@@ -4,95 +4,65 @@
     'scalejs!core',
     './panorama',
     './panoramaBindings',
-    './panoramaLayout',
     'text!./panorama.html',
-    'text!./panorama.css',
-    '../utils',
     'jQuery',
     'knockout'
 ], function (
     core,
     panorama,
     panoramaBindings,
-    panoramaLayout,
     panoramaTemplate,
-    panoramaCss,
-    utils,
     $,
     ko
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
 
-    var addCss = utils.addCss,
-        observable = ko.observable,
-        computed = ko.computed,
-        unwrap = ko.utils.unwrapObservable,
-        data = observable();
+    return function (core) {
+        var registerBindings = core.mvvm.registerBindings,
+            registerTemplates = core.mvvm.registerTemplates;
 
-    addCss('panorama', panoramaCss);
+        function wrapValueAccessor(valueAccessor) {
+            return function () {
+                var options = valueAccessor(),
+                    myPanorama = panorama(options);
 
-    // Ensure the layout is recalculated when pages changes
-    computed(function () {
-        var actualData = unwrap(data);
-        if (actualData) {
-            unwrap(actualData.pages);
-            // do layout later (after pages rendered)
-            setTimeout(panoramaLayout.doLayout, 0);
-        }
-    });
+                return {
+                    name: 'scalejs_panorama_template',
+                    data: myPanorama,
+                    afterRender: myPanorama.doLayout
+                };
 
-    function wrapValueAccessor(valueAccessor) {
-        return function () {
-            var options = valueAccessor();
-            // if data is not set yet, then it's the top-most panorama, so create it
-            // next level panoramas will be created by panorama itself when user navigates
-            // around the panorama view
-            if (!data()) {
-                data(panorama(options, data));
-            }
-            return {
-                name: 'scalejs_panorama_template',
-                data: data,
-                afterRender: panoramaLayout.reset
             };
-
-        };
-    }
-
-    function init(        element,        valueAccessor,        allBindingsAccessor,        viewModel,        bindingContext    ) {
-        var appendTemplate = core.mvvm.appendTemplate;
-
-        if ($('#scalejs_modernui_page_template').length === 0) {
-            appendTemplate(panoramaTemplate);
-            //$('#scalejs-templates').append(panoramaTemplate);
         }
 
-        return { 'controlsDescendantBindings' : true };
-    }
+        function init(            element,            valueAccessor,            allBindingsAccessor,            viewModel,            bindingContext        ) {
+            return { 'controlsDescendantBindings' : true };
+        }
 
-    function update(
-        element,
-        valueAccessor,
-        allBindingsAccessor,
-        viewModel,
-        bindingContext
-    ) {
-        return ko.bindingHandlers.template.update(
+        function update(
             element,
-            wrapValueAccessor(valueAccessor),
+            valueAccessor,
             allBindingsAccessor,
             viewModel,
             bindingContext
-        );
-    }
+        ) {
+            return ko.bindingHandlers.template.update(
+                element,
+                wrapValueAccessor(valueAccessor),
+                allBindingsAccessor,
+                viewModel,
+                bindingContext
+            );
+        }
 
-    return {
-        bindings: panoramaBindings,
-        bindingHandler: {
+        registerBindings(panoramaBindings);
+        registerTemplates(panoramaTemplate);
+
+        return {
             init: init,
             update: update
-        }
+        };
     };
 });
 /*jslint unparam: false*/

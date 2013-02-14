@@ -1,70 +1,41 @@
-﻿/// <reference path="../scripts/_references.js" />
-/*global console,define*/
-/*jslint unparam: true*/define([
-    './panoramaPage',
+﻿/*global define, setTimeout */
+define([
+    './panoramaLayout',
     'scalejs!core',
     'knockout'
 ], function (
-    panoramaPage,
+    layout,
     core,
     ko
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
 
-    var merge = core.object.merge,
-        has = core.object.has;
-        //map = core.array.map,
-        //observable = ko.observable,
-        //computed = ko.computed,
-        //isObservable = ko.isObservable,
-        //unwrap = ko.utils.unwrapObservable
+    return function (options) {
+        var isObservable = ko.isObservable,
+            has = core.object.has,
+            merge = core.object.merge,
+            self,
+            isBackButtonVisible = false;
 
-    function panorama(options, dataContext, previous) {
-        var backButtonVisible = has(previous),
-            thisPage = panoramaPage(merge(options, {isSelectable: true})),
-            self;
-
-        function goToPage(page) {
-            var newPanorama;
-            if (has(page.pages)) {
-                newPanorama = panorama(page, dataContext, self);
-                dataContext(newPanorama);
+        function selectPage(page) {
+            if (isObservable(options.selectedPage)) {
+                options.selectedPage(page);
             }
         }
 
-        function goBack() {
-            if (has(previous)) {
-                dataContext(previous);
-            }
+        function doLayout() {
+            setTimeout(layout.doLayout, 10);
         }
-        /*
-        computed(function () {
-            var opts = options(),
-                page = selectedPage(),
-                base = page || opts,
-                actualPages = has(base, 'pages') ? unwrap(base.pages) : undefined,
-                pages = has(actualPages) ? map(actualPages, panoramaPage) : [],
-                panorama = merge(base, {
-                });
 
-            return panorama;
-        });*/
+        isBackButtonVisible = has(options, 'canBack') && options.canBack;
 
-        thisPage.isSelected(true);
-
-        self = {
-            title: options.title,
-            goToPage: goToPage,
-            goBack: goBack,
-            backButtonVisible: backButtonVisible,
-            pages: thisPage.pages
-        };
+        self = merge(options, {
+            selectPage: selectPage,
+            isBackButtonVisible: isBackButtonVisible,
+            doLayout: doLayout
+        });
 
         return self;
-    }
-
-    return panorama;
+    };
 });
-/*jslint unparam: false*/
-

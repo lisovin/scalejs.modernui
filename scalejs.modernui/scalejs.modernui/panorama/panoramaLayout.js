@@ -20,27 +20,29 @@ define(['jQuery'], function ($) {
         /*jslint unparam: false*/
     }
 
-    function setPageWidth() {
-        var tilesWidth = 0;
-
-        $startMenu.find(".tile-group").each(function () {
-            tilesWidth += $(this).outerWidth() + 80;
-        });
-
-        $startMenu.css("width", 120 + tilesWidth + 20);
-
-        $(".page").css('width', '').css({
-            width: $(document).width()
-        });
-    }
-
     /**
         * called on init 
         * and on resize window
         * and any tiles moves
         */
+    function tileWidth($tile) {
+        var result = 161;
+
+        if ($tile.hasClass('double')) {
+            result = 322;
+        } else if ($tile.hasClass('triple')) {
+            result = 483;
+        } else if ($tile.hasClass('quadro')) {
+            result = 644;
+        }
+
+        return result;
+    }
+
     function tuneUpStartMenu() {
-        var $groups = $startMenu.find('.tile-group');
+        var $groups = $startMenu.find('.tile-group'),
+            groupsWidth = 0;
+
         if ($groups.length === 0) {
             return;
         }
@@ -59,23 +61,15 @@ define(['jQuery'], function ($) {
 
             if ($tiles.length === 0) {
                 // if no tiles set max-width to "optimal" width
+                groupsWidth += $group.width() + 80;
                 return;
             }
             // finding min width according to the widest tile
             $tiles.each(function (index, tile) {
-                var $tile = $(tile),
-                    tileWidth = 161;
+                var tw = tileWidth($(tile));
 
-                if ($tile.hasClass('double')) {
-                    tileWidth = 322;
-                } else if ($tile.hasClass('triple')) {
-                    tileWidth = 483;
-                } else if ($tile.hasClass('quadro')) {
-                    tileWidth = 644;
-                }
-
-                if (tileWidth > groupWidth) {
-                    groupWidth = tileWidth;
+                if (tw > groupWidth) {
+                    groupWidth = tw;
                 }
             });
             /*jslint unparam: false*/
@@ -95,15 +89,18 @@ define(['jQuery'], function ($) {
                     counter = 1;
                 }
                 groupHeight = $groupHeight;
-                groupWidth += 161;
+                groupWidth += tileWidth($($tiles[counter]));
                 $group.css({
                     'maxWidth': groupWidth
                 });
                 $groupHeight = $group.height();
+                groupsWidth += groupWidth + 80;
             }
         });
 
-        setPageWidth();
+        if (groupsWidth > 0) {
+            $startMenu.css("width", 120 + groupsWidth + 20);
+        }
     }
 
     function subscribeResize() {
@@ -121,21 +118,13 @@ define(['jQuery'], function ($) {
     }
 
     function doLayout() {
-        setPageWidth();
+        $startMenu = $('.tiles');
         tuneUpStartMenu();
-        // To preven flickering panorama binding will render the content 'hidden'.
-        // Once layout is complete everything should be made visible.
-        $startMenu.css('visibility', 'visible');
-    }
-
-    function reset(element) {
-        $startMenu = $(element).find('.tiles');
     }
 
     init();
 
     return {
-        reset: reset,
         doLayout: doLayout
     };
 });

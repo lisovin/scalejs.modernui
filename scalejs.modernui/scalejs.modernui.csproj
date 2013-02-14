@@ -12,10 +12,9 @@
     <Content Include="css\modern-responsive.css" />
     <Content Include="css\modern.css" />
     <Content Include="scalejs.modernui\panorama\panorama.js" />
-    <Content Include="scalejs.modernui\panorama\panoramaPage.js" />
     <Content Include="scalejs.modernui\utils.js" />
     <Content Include="scalejs.modernui\panorama\panoramaBindings.js" />
-    <Content Include="scalejs.modernui\panorama\panorama.css" />
+    <Content Include="css\panorama.css" />
     <Content Include="css\theme-dark.css" />
     <Content Include="Properties\build.rjs" />
     <Content Include="Properties\scalejs.modernui.nuspec" />

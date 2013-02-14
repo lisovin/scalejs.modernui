@@ -4,14 +4,9 @@ define(function () {
     'use strict';
 
     return {
-        'title': function () {
+        'panorama-title': function () {
             return {
                 text: this.title
-            };
-        },
-        'subtitle': function () {
-            return {
-                text: 'My subtitle'
             };
         },
         'panorama-pages': function () {
@@ -19,32 +14,25 @@ define(function () {
                 foreach: this.pages
             };
         },
-        'panorama-page-content': function () {
+        'panorama-page-content': function (data) {
             return {
+                render: this.renderer
+                /*
                 template: {
-                    name: this.template
-                }
+                    name: this.template,
+                    afterRender: data.$parent.doLayout
+                }*/
             };
         },
-        'selectable': function (data) {
+        'panorama-page-selectable': function (data) {
             return {
-                click: data.$parent.goToPage
+                click: data.$parent.selectPage
             };
         },
-        'selected-page' : function () {
+        'panorama-back-button' : function () {
             return {
-                'with': this.selectedPage
-            };
-        },
-        'back-button' : function (data) {
-            return {
-                'click': data.$data.goBack,
-                'visible': data.$data.backButtonVisible
-            };
-        },
-        'panorama-page-default-content': function () {
-            return {
-                text: this
+                'click': this.goBack,
+                'visible': this.isBackButtonVisible
             };
         }
     };
