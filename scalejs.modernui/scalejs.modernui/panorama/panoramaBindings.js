@@ -16,12 +16,8 @@ define(function () {
         },
         'panorama-page-content': function (data) {
             return {
-                render: this.renderer
-                /*
-                template: {
-                    name: this.template,
-                    afterRender: data.$parent.doLayout
-                }*/
+                render: this.content,
+                afterRender: data.$parent.doLayout
             };
         },
         'panorama-page-selectable': function (data) {
@@ -36,6 +32,5 @@ define(function () {
             };
         }
     };
-
 });
 

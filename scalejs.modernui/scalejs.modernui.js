@@ -3,7 +3,8 @@
 define([
     'scalejs.modernui/panorama/panoramaBindingHandler',
     'knockout',
-    'knockout.mapping'
+    'knockout.mapping',
+    'scalejs.mvvm'
 ], function (
     panoramaBindingHandler,
     ko
@@ -12,16 +13,7 @@ define([
 	/// <param name="ko" value="window.ko"></param> 
     'use strict';
 
-    function buildCore(core) {
-        var bindingHandler = panoramaBindingHandler(core);
-
-        ko.bindingHandlers.panorama = bindingHandler;
-        ko.virtualElements.allowedBindings.panorama = true;
-    }
-
-    return {
-        dependencies: ['mvvm'],
-        buildCore: buildCore
-    };
+    ko.bindingHandlers.panorama = panoramaBindingHandler;
+    ko.virtualElements.allowedBindings.panorama = true;
 });
 

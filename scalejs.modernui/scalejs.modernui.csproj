@@ -39,7 +39,7 @@
     <Content Include="Scripts\scalejs-0.1.13.min.js" />
     <Content Include="tools\install.ps1" />
     <Content Include="tools\uninstall.ps1" />
-    <Content Include="bootstrapper.js" />
+    <Content Include="config.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

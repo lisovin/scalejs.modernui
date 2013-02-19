@@ -1,5 +1,4 @@
-/*global require*/
-require({
+var require = {
     "paths":  {
         "jQuery":  "empty:",
         "knockout":  "empty:",
@@ -14,4 +13,4 @@ require({
             "scalejs.mvvm"
         ]
     }
-}, ['scalejs.modernui']);
+};

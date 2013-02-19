@@ -17,52 +17,49 @@
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
+    var registerBindings = core.mvvm.registerBindings,
+        registerTemplates = core.mvvm.registerTemplates;
 
-    return function (core) {
-        var registerBindings = core.mvvm.registerBindings,
-            registerTemplates = core.mvvm.registerTemplates;
+    function wrapValueAccessor(valueAccessor) {
+        return function () {
+            var options = valueAccessor(),
+                myPanorama = panorama(options);
 
-        function wrapValueAccessor(valueAccessor) {
-            return function () {
-                var options = valueAccessor(),
-                    myPanorama = panorama(options);
-
-                return {
-                    name: 'scalejs_panorama_template',
-                    data: myPanorama,
-                    afterRender: myPanorama.doLayout
-                };
-
+            return {
+                name: 'scalejs_panorama_template',
+                data: myPanorama,
+                afterRender: myPanorama.doLayout
             };
-        }
 
-        function init(            element,            valueAccessor,            allBindingsAccessor,            viewModel,            bindingContext        ) {
-            return { 'controlsDescendantBindings' : true };
-        }
+        };
+    }
 
-        function update(
+    function init(        element,        valueAccessor,        allBindingsAccessor,        viewModel,        bindingContext    ) {
+        return { 'controlsDescendantBindings' : true };
+    }
+
+    function update(
+        element,
+        valueAccessor,
+        allBindingsAccessor,
+        viewModel,
+        bindingContext
+    ) {
+        return ko.bindingHandlers.template.update(
             element,
-            valueAccessor,
+            wrapValueAccessor(valueAccessor),
             allBindingsAccessor,
             viewModel,
             bindingContext
-        ) {
-            return ko.bindingHandlers.template.update(
-                element,
-                wrapValueAccessor(valueAccessor),
-                allBindingsAccessor,
-                viewModel,
-                bindingContext
-            );
-        }
+        );
+    }
 
-        registerBindings(panoramaBindings);
-        registerTemplates(panoramaTemplate);
+    registerBindings(panoramaBindings);
+    registerTemplates(panoramaTemplate);
 
-        return {
-            init: init,
-            update: update
-        };
+    return {
+        init: init,
+        update: update
     };
 });
 /*jslint unparam: false*/

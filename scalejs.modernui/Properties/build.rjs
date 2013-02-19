@@ -1,5 +1,5 @@
 ﻿({
-	mainConfigFile: '../bootstrapper.js',
+	mainConfigFile: '../config.js',
     include: 'scalejs.modernui',
     exclude: [
         'scalejs!core',

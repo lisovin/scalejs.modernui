@@ -2,7 +2,7 @@
 define(['jQuery'], function ($) {
     'use strict';
 
-    var $startMenu,
+    var $panorama,
         maxGroupHeight,
         resizeTimer;
 
@@ -39,8 +39,63 @@ define(['jQuery'], function ($) {
         return result;
     }
 
+    function findMinWidth($tiles) {
+        var groupWidth = 0;
+
+        if ($tiles.length === 0) {
+            return -1;
+        }
+        // finding min width according to the widest tile
+        /*jslint unparam:true*/
+        $tiles.each(function (index, tile) {
+            var tw = tileWidth($(tile));
+
+            if (tw > groupWidth) {
+                groupWidth = tw;
+            }
+        });
+        /*jslint unparam:false*/
+        return groupWidth;
+    }
+
+    function calcGroupWidth($group) {
+        var $tiles = $group.find('.tile'),
+            groupWidth = findMinWidth($tiles, $group),
+            $groupHeight,
+            i,
+            tw;
+
+        // deal with the case when there's no tiles
+        if (groupWidth === -1) {
+            return $group.width() + 80;
+        }
+        /*jslint unparam: false*/
+
+        $group.css({
+            width: 'auto',
+            maxWidth: groupWidth
+        });
+
+        $groupHeight = $group.height(); //get current height
+
+        for (i = 1; i < $tiles.length && $groupHeight > maxGroupHeight; i += 1) {
+            tw = tileWidth($($tiles[i])); //get next tile
+            groupWidth += tw;   //append it to the top row
+            $group.css({    //set the css
+                'maxWidth': groupWidth
+            });
+            $groupHeight = $group.height(); //get the new height
+        }
+
+        return groupWidth + 80;
+    }
+
     function tuneUpStartMenu() {
-        var $groups = $startMenu.find('.tile-group'),
+        if (!$panorama) {
+            return;
+        }
+
+        var $groups = $panorama.find('.tile-group'),
             groupsWidth = 0;
 
         if ($groups.length === 0) {
@@ -52,54 +107,13 @@ define(['jQuery'], function ($) {
         /*jslint unparam: true*/
         $groups.each(function (index, group) {
             var $group = $(group),
-            // finding min width for group
-                groupWidth = 0,
-                $tiles = $group.find('.tile'),
-                counter,
-                $groupHeight,
-                groupHeight;
+                groupWidth = calcGroupWidth($group);
 
-            if ($tiles.length === 0) {
-                // if no tiles set max-width to "optimal" width
-                groupsWidth += $group.width() + 80;
-                return;
-            }
-            // finding min width according to the widest tile
-            $tiles.each(function (index, tile) {
-                var tw = tileWidth($(tile));
-
-                if (tw > groupWidth) {
-                    groupWidth = tw;
-                }
-            });
-            /*jslint unparam: false*/
-
-            $group.css({
-                width: 'auto',
-                maxWidth: groupWidth
-            });
-
-            $groupHeight = $group.height();
-            while ($groupHeight > maxGroupHeight) {
-                if (counter > $tiles.length) { // protection from endless loop
-                    break;
-                } else if ($groupHeight === groupHeight) {
-                    counter += 1;
-                } else {
-                    counter = 1;
-                }
-                groupHeight = $groupHeight;
-                groupWidth += tileWidth($($tiles[counter]));
-                $group.css({
-                    'maxWidth': groupWidth
-                });
-                $groupHeight = $group.height();
-                groupsWidth += groupWidth + 80;
-            }
+            groupsWidth += groupWidth;
         });
 
         if (groupsWidth > 0) {
-            $startMenu.css("width", 120 + groupsWidth + 20);
+            $panorama.css("width", 120 + groupsWidth + 20);
         }
     }
 
@@ -118,7 +132,7 @@ define(['jQuery'], function ($) {
     }
 
     function doLayout() {
-        $startMenu = $('.tiles');
+        $panorama = $('.tiles');
         tuneUpStartMenu();
     }
 
