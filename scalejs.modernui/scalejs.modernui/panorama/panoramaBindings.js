@@ -14,10 +14,10 @@ define(function () {
                 foreach: this.pages
             };
         },
-        'panorama-page-content': function (data) {
+        'panorama-page-content': function () {
             return {
-                render: this.content,
-                afterRender: data.$parent.doLayout
+                render: this.content
+                // _TODO: call layout of panorama after render is done
             };
         },
         'panorama-page-selectable': function (data) {
@@ -27,8 +27,8 @@ define(function () {
         },
         'panorama-back-button' : function () {
             return {
-                'click': this.goBack,
-                'visible': this.isBackButtonVisible
+                click: this.goBack,
+                visible: this.isBackButtonVisible
             };
         }
     };

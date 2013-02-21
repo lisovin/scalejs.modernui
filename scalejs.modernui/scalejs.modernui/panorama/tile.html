@@ -1,0 +1,28 @@
+﻿<div id="sj_panorama_tile_template">
+    <div class="tile" data-class="panorama-tile"> 
+        <!-- ko if: $data.content -->
+        <div class="tile-content" data-class="panorama-tile-content"></div>
+        <!-- /ko -->
+        <!-- ko if: $data.showBrand -->
+        <div class="brand" data-class="panorama-tile-brand-css">
+            <!-- ko if: $data.brandIcon -->
+            <img class="icon" src="#" data-class="panorama-tile-brand-icon" />
+            <!-- /ko -->
+            <!-- ko if: $data.brandName -->
+            <span class="name" data-class="panorama-tile-brand-name"></span>
+            <!-- /ko -->
+            <!-- ko if: $data.brandHtml -->
+            <p class="text" data-class="panorama-tile-brand-html"></p>
+            <!-- /ko -->
+            <!-- ko if: $data.brandBadge -->
+            <div class="badge" data-class="panorama-tile-brand-badge"></div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </div>
+</div>
+
+<div id="sj_panorama_tile_content_default_html_template">
+    <div data-class="panorama-tile-content-default-html"></div>
+</div>
+

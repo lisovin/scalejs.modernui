@@ -3,6 +3,9 @@
     include: 'scalejs.modernui',
     exclude: [
         'scalejs!core',
-		'text'
+		'text',
+		'knockout',
+		'knockout.mapping',
+		'scalejs.mvvm'
     ]
 })

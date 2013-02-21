@@ -2,35 +2,65 @@
 /*global console,define,setTimeout*/
 /*jslint unparam: true*/define([
     'scalejs!core',
-    './panorama',
-    './panoramaBindings',
-    'text!./panorama.html',
+    './tileBindings',
+    'text!./tile.html',
     'jQuery',
-    'knockout'
+    'knockout',
+    'scalejs.mvvm'
 ], function (
     core,
-    panorama,
-    panoramaBindings,
-    panoramaTemplate,
+    tileBindings,
+    tileTemplate,
     $,
     ko
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
+
     var registerBindings = core.mvvm.registerBindings,
         registerTemplates = core.mvvm.registerTemplates;
+
+
+    function tile(options) {
+        var //has = core.object.has,
+            merge = core.object.merge,
+            observable = ko.observable,
+            self;
+
+        function selectTile() {
+            self.selected(true);
+        }
+
+        self = merge({
+            // tile
+            selectTile: selectTile,
+            selected: observable(),
+            width: 1,
+            height: 1,
+            // content
+            content: undefined,
+            contentTemplate: undefined,
+            bgColor: undefined,
+            // brand
+            showBrand: true,
+            brandName: undefined,
+            brandHtml: undefined,
+            brandBadge: undefined,
+            brandBgColor: undefined
+        }, options);
+
+        return self;
+    }
 
     function wrapValueAccessor(valueAccessor) {
         return function () {
             var options = valueAccessor(),
-                myPanorama = panorama(options);
+                myTile = tile(options);
 
             return {
-                name: 'scalejs_panorama_template',
-                data: myPanorama,
-                afterRender: myPanorama.doLayout
+                name: 'sj_panorama_tile_template',
+                data: myTile
             };
-
         };
     }
 
@@ -54,8 +84,8 @@
         );
     }
 
-    registerBindings(panoramaBindings);
-    registerTemplates(panoramaTemplate);
+    registerBindings(tileBindings);
+    registerTemplates(tileTemplate);
 
     return {
         init: init,
