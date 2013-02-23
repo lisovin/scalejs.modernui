@@ -3,7 +3,8 @@
 define(['scalejs!core'], function (core) {
     'use strict';
 
-    var get = core.object.get;
+    var get = core.object.get,
+        has = core.object.has;
 
     return {
         'panorama-tile': function () {
@@ -25,27 +26,19 @@ define(['scalejs!core'], function (core) {
                     widthCss(this.width),
                     heightCss(this.height),
                     this.bgColor ? 'bg-color-' + this.bgColor : undefined,
-                    this.selected() ? 'selected' : undefined
+                    this.selectionVisible &&
+                        has(this, 'content', 'isSelected') &&
+                            this.content.isSelected() ? 'selected' : undefined
                 ],
                 css = classes
                     .filter(function (css) { return css; })
                     .reduce(function (classes, css) { return classes + ' ' + css; });
 
             return {
-                css: css
+                css: css,
+                click: this.selectTile
             };
         },
-        /*
-        'panorama-tile-content': function (context) {
-            if (has(context, '$data', 'content')) {
-                return {
-                    template: {
-                        name: 'sj_panorama_tile_content_template',
-                        data: context.$data.content
-                    }
-                };
-            }
-        },*/
 
         'panorama-tile-content': function (context) {
             return {

@@ -22,19 +22,22 @@
 
 
     function tile(options) {
-        var //has = core.object.has,
+        var has = core.object.has,
             merge = core.object.merge,
             observable = ko.observable,
             self;
 
-        function selectTile() {
-            self.selected(true);
+        function toggleTileSelection() {
+            if (has(self, 'content', 'isSelected')) {
+                self.content.isSelected(!self.content.isSelected());
+            }
         }
 
         self = merge({
             // tile
-            selectTile: selectTile,
-            selected: observable(),
+            selectTile: toggleTileSelection,
+            isSelected: observable(),
+            selectionVisible: true,
             width: 1,
             height: 1,
             // content
