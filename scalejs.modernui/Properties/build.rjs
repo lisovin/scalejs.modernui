@@ -6,6 +6,7 @@
 		'text',
 		'knockout',
 		'knockout.mapping',
-		'scalejs.mvvm'
+		'scalejs.mvvm',
+		'bPopup'
     ]
 })

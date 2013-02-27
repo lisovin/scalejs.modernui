@@ -5,14 +5,17 @@
     './panoramaBindings',
     './panoramaLayout',
     'text!./panorama.html',
+    './messageDialog',
     'jQuery',
     'knockout',
+    'bPopup',
     'scalejs.mvvm'
 ], function (
     core,
     panoramaBindings,
     panoramaLayout,
     panoramaTemplate,
+    messageDialog,
     $,
     ko
 ) {
@@ -21,12 +24,11 @@
     var registerBindings = core.mvvm.registerBindings,
         registerTemplates = core.mvvm.registerTemplates;
 
-    function panorama(options) {
+    function panorama(options, element) {
         var isObservable = ko.isObservable,
             has = core.object.has,
             merge = core.object.merge,
-            self,
-            isBackButtonVisible = false;
+            self;
 
         function selectPage(page) {
             if (isObservable(options.selectedPage)) {
@@ -38,21 +40,24 @@
             setTimeout(panoramaLayout.doLayout, 10);
         }
 
-        isBackButtonVisible = has(options, 'canBack') && options.canBack;
-
-        self = merge(options, {
+        self = merge({
             selectPage: selectPage,
-            isBackButtonVisible: isBackButtonVisible,
-            doLayout: doLayout
-        });
+            isBackButtonVisible: options.canBack,
+            doLayout: doLayout,
+            message: null
+        }, options);
+
+        if (has(options, 'message')) {
+            messageDialog(self, options.message, element);
+        }
 
         return self;
     }
 
-    function wrapValueAccessor(valueAccessor) {
+    function wrapValueAccessor(valueAccessor, element) {
         return function () {
             var options = valueAccessor(),
-                myPanorama = panorama(options);
+                myPanorama = panorama(options, element);
 
             return {
                 name: 'sj_panorama_template',
@@ -76,7 +81,7 @@
     ) {
         return ko.bindingHandlers.template.update(
             element,
-            wrapValueAccessor(valueAccessor),
+            wrapValueAccessor(valueAccessor, element),
             allBindingsAccessor,
             viewModel,
             bindingContext
