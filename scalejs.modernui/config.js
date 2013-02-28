@@ -8,7 +8,8 @@ var require = {
         "scalejs":  "Scripts/scalejs-0.2.7",
         "scalejs.mvvm":  "Scripts/scalejs.mvvm-0.2.3.2",
         "text":  "Scripts/text",
-        "bPopup": "Scripts/jquery.bpopup"
+        "bPopup": "Scripts/jquery.bpopup",
+        "scalejs.statechart-scion": "empty:"
     },
     "scalejs":  {
         "extensions":  [

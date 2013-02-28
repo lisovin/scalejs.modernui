@@ -40,15 +40,14 @@
             setTimeout(panoramaLayout.doLayout, 10);
         }
 
-        self = merge({
+        self = merge(options, {
             selectPage: selectPage,
             isBackButtonVisible: options.canBack,
-            doLayout: doLayout,
-            message: null
-        }, options);
+            doLayout: doLayout
+        });
 
         if (has(options, 'message')) {
-            messageDialog(self, options.message, element);
+            self.message = messageDialog(options.message, element);
         }
 
         return self;

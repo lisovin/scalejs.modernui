@@ -35,6 +35,17 @@
     display: none;
 }
 
+.panorama-message
+{
+    position: fixed;
+    left: 0;
+    right: 0;
+    padding: 10px 20px;
+    color: #fff;
+    min-height: 80px;
+    background-color: #2d89ef !important;
+}
+
 .panorama-message-box
 {
     margin-left: auto;
@@ -47,7 +58,7 @@
     font-weight: bold;
 }
 
-.panorama-message-message
+.panorama-message-content
 {
     text-align: left;
 }

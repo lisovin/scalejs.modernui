@@ -18,12 +18,20 @@
             </div>
         </div>
     </div> 
-    <div id="panorama-message" data-class="panorama-message-css">
-        <div class="grid panorama-message-box" data-bind="with: message">
+    
+    <div id="panorama-message">
+    <!-- ko class: panorama-message -->
+    <!-- /ko -->
+    </div>
+</div>
+
+<div id="panorama_message_dialog_template">
+    <div class="panorama-message" data-bind="css: css">
+        <div class="grid panorama-message-box">
             <div class="row panorama-message-title">
                 <div class="span9"><h3 data-bind="text: title"></h3></div>
             </div>
-            <div class="row panorama-messagemessage">
+            <div class="row panorama-message-content">
                 <div class="span9" data-bind="text: content"></div>
             </div>
             <div class="row">
@@ -31,6 +39,23 @@
                 <div class="span1">
                     <div data-bind="if: $data.onClose"><button data-bind="click: onClose">Close</button></div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="panorama_message_bar_template">
+    <div class="panorama-message" data-bind="css: css">
+        <div class="grid panorama-message-box">
+            <div class="row panorama-message-content">
+                <div data-bind="css: contentCss, text: content"></div>
+                <!-- ko if: buttonsCss -->
+                <div data-bind="css: buttonsCss">
+                    <!-- ko foreach: buttons -->
+                    <button data-bind="click: action, text: content"></button>
+                    <!-- /ko -->
+                </div>
+                <!-- /ko -->
             </div>
         </div>
     </div>
