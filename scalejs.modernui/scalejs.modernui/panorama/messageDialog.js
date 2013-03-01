@@ -19,7 +19,8 @@ define([
     var registerBindings = core.mvvm.registerBindings,
         statechart = core.state.builder.statechart,
         state = core.state.builder.state,
-        get = core.object.get;
+        get = core.object.get,
+        is = core.type.is;
 
     registerBindings(messageDialogBindings);
 
@@ -71,7 +72,8 @@ define([
                         this.isShowDialogPending = false;
                         this.popup = createPopup({
                             position: [0, 'auto'],
-                            modal: true
+                            modal: true,
+                            modalClose: false
                         });
                     })
                     .on('showing.bar').goto('bar', function () {
@@ -89,8 +91,6 @@ define([
                 var opts = unwrap(messageOptions),
                     result = merge({
                         css: '',
-                        contentCss: 'span10',
-                        buttonsCss: null,
                         title: null,
                         content: null,
                         buttons: [],
@@ -100,12 +100,16 @@ define([
 
                 result.contentCss = 'span' + (10 - Math.ceil(3 * result.buttons.length / 2));
                 result.buttonsCss = 'span' + Math.ceil(3 * result.buttons.length / 2);
-                result.buttons.forEach(function (b) {
-                    var delegate = b.action;
-                    b.action = function () {
+                result.buttons = result.buttons.map(function (b) {
+                    var wrapped = {};
+                    wrapped.content = is(b, 'string') ? b : b.content;
+                    wrapped.action = function () {
                         popupStatechart.send('closing');
-                        delegate();
+                        if (b.action) {
+                            b.action();
+                        }
                     };
+                    return wrapped;
                 });
 
                 if (opts) {

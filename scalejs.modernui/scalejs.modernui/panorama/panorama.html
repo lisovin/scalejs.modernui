@@ -29,15 +29,17 @@
     <div class="panorama-message" data-bind="css: css">
         <div class="grid panorama-message-box">
             <div class="row panorama-message-title">
-                <div class="span9"><h3 data-bind="text: title"></h3></div>
+                <div class="span10"><h3 data-bind="text: title"></h3></div>
             </div>
             <div class="row panorama-message-content">
-                <div class="span9" data-bind="text: content"></div>
+                <div class="span10" data-bind="text: content"></div>
             </div>
             <div class="row">
-                <div class="span9"></div>
-                <div class="span1">
-                    <div data-bind="if: $data.onClose"><button data-bind="click: onClose">Close</button></div>
+                <div data-bind="css: contentCss"></div>
+                <div data-bind="css: buttonsCss">
+                    <!-- ko foreach: buttons -->
+                    <button data-bind="click: action, text: content"></button>
+                    <!-- /ko -->
                 </div>
             </div>
         </div>
