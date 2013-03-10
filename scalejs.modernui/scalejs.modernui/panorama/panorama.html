@@ -1,8 +1,9 @@
-﻿<div id="sj_panorama_template">
-    <div class="panorama page secondary fixed-header">
+﻿<div id="panorama_template">
+    <div class="panorama page secondary fixed-header" style="position: absolute; visibility: hidden">
         <div class="page-header">
             <div class="page-header-content">
-                <h4 class="title" data-class="panorama-title"></h4>
+                <!-- ko class: panorama-header-content -->
+                <!-- /ko -->
                 <div class="back-button page-back" data-class="panorama-back-button"></div>
             </div>
         </div>
@@ -10,7 +11,7 @@
             <div class="page-region-content tiles">
                 <!-- ko class: panorama-pages -->
                 <div class="tile-group tile-drag" style="width: auto"> 
-                    <h3 class="subtitle" data-class="panorama-title panorama-page-selectable"></h3>
+                    <h3 class="subtitle" data-class="panorama-page-header panorama-page-selectable"></h3>
                     <!-- ko class: panorama-page-content -->
                     <!-- /ko -->
                 </div>
@@ -23,6 +24,15 @@
     <!-- ko class: panorama-message -->
     <!-- /ko -->
     </div>
+
+    <div id="panorama-loading" style="display:none">
+        <img src="images/Loading.png" />
+        <h2 style="margin-left:8px;">LOADING</h2>
+    </div>
+</div>
+
+<div id="panorama_header_default_template">
+    <h4 class="title" data-bind="text: $data"></h4>
 </div>
 
 <div id="panorama_message_dialog_template">
@@ -83,3 +93,4 @@
 <div id="panorama_tile_brand_template">
     <div class="tile-content""></div>
 </div>
+
