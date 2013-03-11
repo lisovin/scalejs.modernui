@@ -1,18 +1,16 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define*/
 define([
-    'scalejs!core',
+    //'scalejs!core',
     'knockout'
 ], function (
-    core,
+    //core,
     ko
 ) {
     'use strict';
 
-    var has = core.object.has,
-        unwrap = ko.utils.unwrapObservable,
-        selectableArray = core.mvvm.selectableArray,
-        renderable = core.mvvm.renderable;
+    var unwrap = ko.utils.unwrapObservable;
+        //selectableArray = core.mvvm.selectableArray;
 
     return {
         'panorama-pages': function () {
@@ -21,9 +19,12 @@ define([
             };
         },
         'panorama-header-content': function () {
-            if (has(this, 'header', 'template')) {
+            if (this.headerTemplate) {
                 return {
-                    render: this.header
+                    template: {
+                        name: this.headerTemplate,
+                        data: this.header
+                    }
                 };
             }
 
@@ -42,28 +43,40 @@ define([
 
             function renderContent() {
                 // non-tiles content
-                var content = unwrap(ctx.$data.content);
-                if (content) {
-                    content.afterRender = afterRender;
+                if (ctx.$data.contentTemplate) {
+                    return {
+                        template: {
+                            name: ctx.$data.contentTemplate,
+                            data: ctx.$data.content,
+                            afterRender: afterRender
+                        }
+                    };
                 }
 
                 return {
-                    render: content
+                    render: {
+                        text: JSON.stringify(ctx.$data.content),
+                        afterRender: afterRender
+                    }
                 };
             }
 
             function renderTiles() {
                 var tiles = unwrap(ctx.$data.tiles) || [],
-                    tileTemplate = unwrap(ctx.$data.tileTemplate) || 'sj_panorama_tile_template',
-                    renderableTiles = tiles.map(renderable(tileTemplate)),
-                    content = selectableArray(renderableTiles, {
+                    tileTemplate = unwrap(ctx.$data.tileTemplate) || 'sj_panorama_tile_template';
+                /*
+                    content = selectableArray(tiles, {
                         selectedItem: ctx.selectedTile,
-                        selectionPolicy: 'deselect'
-                    });
-                content.afterRender = afterRender;
+                        selectionPolicy: 'deselect',
+                        afterRender: afterRender
+                    });*/
 
                 return {
-                    render: content
+                    template: {
+                        name: tileTemplate,
+                        foreach: tiles,
+                        afterRender: afterRender
+                    }
                 };
             }
 
