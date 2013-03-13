@@ -39,19 +39,8 @@
         }
 
         function doLayout() {
-            // Do we need timeout here?
-            setTimeout(panoramaLayout.doLayout, 10);
+            panoramaLayout.doLayout();
         }
-
-        //function afterRender() {
-            /*
-            var panoramaDiv = ko.virtualElements.childNodes(element).filter(function (e) {
-                return e.className && e.className.split(' ').indexOf("panorama") >= 0;
-            })[0];
-
-            transitions.bind(options.visualState, panoramaDiv);*/
-        //    transitions.start();
-        //}
 
         self = merge(options, {
             selectPage: selectPage,
@@ -63,23 +52,6 @@
         if (has(options, 'message')) {
             self.message = messageDialog(options.message, element);
         }
-        /*
-        transitions = transitionManager({
-            visualState: options.visualState,
-            element: element,
-            inTransitions: [
-                busy({
-                    visualState: options.visualState,
-                    shown: function () {
-                        isInDom(true);
-                    }
-                }),
-                slide()
-            ],
-            outTransitions: [
-                fade()
-            ]
-        });*/
 
         return self;
     }

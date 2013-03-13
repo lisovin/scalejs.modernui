@@ -17,13 +17,13 @@ define([
         busy = transitions.busy;
 
     return {
-        'transition-manager': function () {
+        'panorama-transitionable': function () {
             return {
-                transitionManager: {
-                    visualState: this.visualState,
+                transitionable: {
+                    transitionableState: this.transitionableState,
                     inTransitions: [
                         busy({
-                            visualState: this.visualState
+                            transitionableState: this.transitionableState
                         }),
                         slide()
                     ],
@@ -82,24 +82,31 @@ define([
                 };
             }
 
+            /*jslint unparam:true*/
             function renderTiles() {
                 var tiles = unwrap(ctx.$data.tiles) || [],
-                    tileTemplate = unwrap(ctx.$data.tileTemplate) || 'sj_panorama_tile_template';
+                    tileTemplate = unwrap(ctx.$data.tileTemplate) || 'sj_panorama_tile_template',
+                    lastTile = tiles[tiles.length - 1];
                 /*
                     content = selectableArray(tiles, {
                         selectedItem: ctx.selectedTile,
                         selectionPolicy: 'deselect',
                         afterRender: afterRender
                     });*/
-
                 return {
                     template: {
                         name: tileTemplate,
                         foreach: tiles,
-                        afterRender: afterRender
+
+                        afterRender: function (nodes, item) {
+                            if (item === lastTile) {
+                                afterRender();
+                            }
+                        }
                     }
                 };
             }
+            /*jslint unparam:false*/
 
             if (this.content) {
                 return renderContent();

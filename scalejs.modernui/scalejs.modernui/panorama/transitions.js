@@ -32,15 +32,18 @@
             var renderChild = this.renderChild,
                 subscription;
 
-            subscription = opts.visualState.subscribe(function (newValue) {
+            subscription = opts.transitionableState.subscribe(function (newValue) {
                 if (newValue === 'busy.closing') {
                     // Since rendering can take a long time - render it before closing popup
                     renderChild();
 
-                    if (popup) {
-                        popup.close();
-                        popup = null;
-                    }
+                    // schedule popup close on after the child is rendered
+                    setTimeout(function () {
+                        if (popup) {
+                            popup.close();
+                            popup = null;
+                        }
+                    }, 0);
 
                     subscription.dispose();
                 }
@@ -54,9 +57,9 @@
                     modalClose: false,
                     opacity: 0,
                     onOpen: function () {
-                        // onOpen fires right begore popup is open so scheduler visualState 
+                        // onOpen fires right begore popup is open so scheduler transitionableState 
                         setTimeout(function () {
-                            opts.visualState('busy.shown');
+                            opts.transitionableState('busy.shown');
                         }, 0);
                     },
                     onClose: function () {
