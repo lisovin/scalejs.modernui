@@ -2,17 +2,38 @@
 /*global console,define*/
 define([
     //'scalejs!core',
+    './transitions',
     'knockout'
 ], function (
     //core,
+    transitions,
     ko
 ) {
     'use strict';
 
-    var unwrap = ko.utils.unwrapObservable;
-        //selectableArray = core.mvvm.selectableArray;
+    var unwrap = ko.utils.unwrapObservable,
+        slide = transitions.slide,
+        fade = transitions.fade,
+        busy = transitions.busy;
 
     return {
+        'transition-manager': function () {
+            return {
+                transitionManager: {
+                    visualState: this.visualState,
+                    inTransitions: [
+                        busy({
+                            visualState: this.visualState
+                        }),
+                        slide()
+                    ],
+                    outTransitions: [
+                        fade()
+                    ]
+                }
+            };
+        },
+
         'panorama-pages': function () {
             return {
                 foreach: this.pages

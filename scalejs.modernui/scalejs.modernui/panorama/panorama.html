@@ -1,4 +1,5 @@
 ﻿<div id="panorama_template">
+    <!-- ko class: transition-manager -->
     <div class="panorama page secondary fixed-header" style="position: absolute; visibility: hidden">
         <div class="page-header">
             <div class="page-header-content">
@@ -24,12 +25,15 @@
     <!-- ko class: panorama-message -->
     <!-- /ko -->
     </div>
+    <!-- /ko -->
 
     <div id="panorama-loading" style="display:none">
         <img src="images/Loading.png" />
         <h2 style="margin-left:8px;">LOADING</h2>
     </div>
 </div>
+
+<div id="noop_template"></div>
 
 <div id="panorama_header_default_template">
     <h4 class="title" data-bind="text: $data"></h4>
