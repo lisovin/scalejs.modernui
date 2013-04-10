@@ -39,56 +39,90 @@ define(['jQuery'], function ($) {
         return result;
     }
 
-    function findMinWidth($tiles) {
-        var groupWidth = 0;
+    function calcGroupWidth($group) {
+        var $tiles = $group.find('.tile'),
+            $groupHeight,
+            maxWidth = 0,
+            i,
+            m,
+            l,
+            r,
+            rightEdge;
 
+        //console.log('Calculating width of ' + $group.find('.subtitle').html());
+
+        // deal with the case when there's no tiles
         if ($tiles.length === 0) {
-            return -1;
+            return $group.width();
         }
-        // finding min width according to the widest tile
         /*jslint unparam:true*/
         $tiles.each(function (index, tile) {
             var tw = tileWidth($(tile));
 
-            if (tw > groupWidth) {
-                groupWidth = tw;
+            if (tw > maxWidth) {
+                maxWidth = tw;
             }
         });
         /*jslint unparam:false*/
-        return groupWidth;
-    }
 
-    function calcGroupWidth($group) {
-        var $tiles = $group.find('.tile'),
-            groupWidth = findMinWidth($tiles, $group),
-            $groupHeight,
-            i,
-            tw;
-
-        // deal with the case when there's no tiles
-        if (groupWidth === -1) {
-            return $group.width() + 80;
+        // initial values
+        l = 0;
+        r = $tiles.toArray().reduce(function (acc, t) {
+            return acc + tileWidth($(t));
+        }, 0);
+        //console.log('r: ' + r);
+        //console.log('l: ' + l);
+        //console.time('suspicious loop');
+        while (r - l > 161) {
+            m = (l + r) / 2;
+            //console.time('set css');
+            $group.css({
+                'width': m
+            });
+            //console.timeEnd('set css');
+            //console.time('get height');
+            $groupHeight = $group.height();
+            //console.timeEnd('get height');
+            if ($groupHeight < maxGroupHeight) {
+                r = m;
+            } else {
+                l = m;
+            }
+            //find tile most right in first row
+            //take right corner
+            //
+            //console.log('groupHeight: ' + $groupHeight);
+            //console.log('r: ' + r);
+            //console.log('l: ' + l);
+            //console.log('loop');
         }
-        /*jslint unparam: false*/
+        //console.timeEnd('suspicious loop');
+        //console.log('m: ' + m);
+        $group.css({
+            'width': r
+        });
+        i = 0;
+        while (i < $tiles.length - 1 && $tiles.eq(i).position().left < $tiles.eq(i + 1).position().left) {
+            i += 1;
+        }
+        // replace this:
+        //for (i = 0; i < $tiles.length - 1 && $tiles.eq(i).position().left < $tiles.eq(i + 1).position().left; 
+        //i += 1) {
+        //}
+
+        //console.log('index: ' + i);
+
+        rightEdge = $tiles.eq(i).position().left + tileWidth($tiles.eq(i)) - $tiles.eq(0).position().left;
+
+        //console.log('rightEdge: ' + rightEdge);
 
         $group.css({
-            width: 'auto',
-            maxWidth: groupWidth
+            'width': rightEdge
         });
 
-        $groupHeight = $group.height(); //get current height
-
-        for (i = 1; i < $tiles.length && $groupHeight > maxGroupHeight; i += 1) {
-            tw = tileWidth($($tiles[i])); //get next tile
-            groupWidth += tw;   //append it to the top row
-            $group.css({    //set the css
-                'maxWidth': groupWidth
-            });
-            $groupHeight = $group.height(); //get the new height
-        }
-
-        return groupWidth + 80;
+        return rightEdge;
     }
+
 
     function tuneUpStartMenu() {
         if (!$panorama) {
@@ -109,7 +143,7 @@ define(['jQuery'], function ($) {
             var $group = $(group),
                 groupWidth = calcGroupWidth($group);
 
-            groupsWidth += groupWidth;
+            groupsWidth += groupWidth + 80;
         });
 
         if (groupsWidth > 0) {

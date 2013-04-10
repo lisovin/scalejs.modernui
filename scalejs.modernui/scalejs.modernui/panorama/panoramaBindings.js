@@ -2,38 +2,16 @@
 /*global console,define*/
 define([
     //'scalejs!core',
-    './transitions',
     'knockout'
 ], function (
     //core,
-    transitions,
     ko
 ) {
     'use strict';
 
-    var unwrap = ko.utils.unwrapObservable,
-        slide = transitions.slide,
-        fade = transitions.fade,
-        busy = transitions.busy;
+    var unwrap = ko.utils.unwrapObservable;
 
     return {
-        'panorama-transitionable': function () {
-            return {
-                transitionable: {
-                    transitionableState: this.transitionableState,
-                    inTransitions: [
-                        busy({
-                            transitionableState: this.transitionableState
-                        }),
-                        slide()
-                    ],
-                    outTransitions: [
-                        fade()
-                    ]
-                }
-            };
-        },
-
         'panorama-pages': function () {
             return {
                 foreach: this.pages

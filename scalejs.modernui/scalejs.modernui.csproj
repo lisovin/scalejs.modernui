@@ -15,7 +15,6 @@
     <Content Include="css\theme-dark.css" />
     <Content Include="fonts\iconFont.svg" />
     <Content Include="fonts\license.txt" />
-    <Content Include="scalejs.modernui\panorama\transitions.js" />
     <Content Include="scalejs.modernui\panorama\messageDialogBindings.js" />
     <Content Include="scalejs.modernui\panorama\messageDialog.js" />
     <Content Include="scalejs.modernui\panorama\tileBindings.js" />
@@ -26,7 +25,9 @@
     <None Include="fonts\iconFont.woff" />
     <Content Include="scalejs.modernui\panorama\panoramaBindings.js" />
     <Content Include="Properties\build.rjs" />
-    <Content Include="Properties\scalejs.modernui.nuspec" />
+    <Content Include="Properties\scalejs.modernui.nuspec">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="scalejs.modernui.js" />
     <Content Include="scalejs.modernui\panorama\panorama.html" />
     <Content Include="scalejs.modernui\panorama\panorama.js" />

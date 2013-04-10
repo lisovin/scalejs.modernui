@@ -9,8 +9,7 @@
     'jQuery',
     'knockout',
     'bPopup',
-    'scalejs.mvvm',
-    'scalejs.effects-jqueryui'
+    'scalejs.mvvm'
 ], function (
     core,
     panoramaBindings,

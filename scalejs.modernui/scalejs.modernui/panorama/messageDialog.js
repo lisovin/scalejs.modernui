@@ -6,7 +6,8 @@ define([
     'jQuery',
     'knockout',
     'bPopup',
-    'scalejs.statechart-scion'
+    'scalejs.statechart-scion',
+    'scalejs.mvvm'
 ], function (
     core,
     messageDialogBindings,
