@@ -32,6 +32,9 @@
     <Content Include="scalejs.modernui\panorama\panorama.html" />
     <Content Include="scalejs.modernui\panorama\panorama.js" />
     <Content Include="scalejs.modernui\panorama\panoramaLayout.js" />
+    <Content Include="scalejs.modernui\pivot\pivot.js" />
+    <Content Include="scalejs.modernui\pivot\pivot.html" />
+    <Content Include="scalejs.modernui\pivot\pivotBindings.js" />
     <Content Include="Scripts\es5-shim.js" />
     <Content Include="Scripts\es5-shim.min.js" />
     <Content Include="Scripts\jquery.bpopup.js" />

@@ -3,11 +3,13 @@
 define([
     'scalejs.modernui/panorama/panorama',
     'scalejs.modernui/panorama/tile',
+    'scalejs.modernui/pivot/pivot',
     'knockout',
     'knockout.mapping'
 ], function (
     panorama,
     tile,
+    pivot,
     ko
 ) {
 	/// <param name="$" value="window.$"/>
@@ -16,6 +18,7 @@ define([
 
     ko.bindingHandlers.panorama = panorama;
     ko.bindingHandlers.tile = tile;
+    ko.bindingHandlers.pivot = pivot;
 
     ko.virtualElements.allowedBindings.panorama = true;
     ko.virtualElements.allowedBindings.tile = true;
