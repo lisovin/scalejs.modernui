@@ -52,6 +52,11 @@ define([
             opts.selectedPage = observable(pages()[0]);
         }
 
+        //if user provides empty observable for selectedPage then set it with the first one
+        if (!opts.selectedPage()) {
+            opts.selectedPage(pages()[0]);
+        }
+
         ko.applyBindingsToNode(element, { template: 'pivot_template' }, opts);
 
         return { controlsDescendantBindings: true };
