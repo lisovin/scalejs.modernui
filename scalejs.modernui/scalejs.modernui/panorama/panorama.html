@@ -34,12 +34,17 @@
 
 <div id="panorama_message_dialog_template">
     <div class="panorama-message" data-bind="css: css">
-        <div class="grid panorama-message-box">
+        <div class="grid panorama-message-box" style="margin: auto">
             <div class="row panorama-message-title">
                 <div class="span10"><h3 data-bind="text: title"></h3></div>
             </div>
             <div class="row panorama-message-content">
-                <div class="span10" data-bind="text: content"></div>
+                <!-- ko if: $data.contentText -->
+                <div data-bind="css: contentCss, text: contentText"></div>
+                <!-- /ko -->
+                <!-- ko if: $data.contentTemplate -->
+                <div class="span10" data-bind="template: { name: contentTemplate, data: content || {} }"></div>
+                <!-- /ko -->                
             </div>
             <div class="row">
                 <div data-bind="css: contentCss"></div>
@@ -57,7 +62,12 @@
     <div class="panorama-message" data-bind="css: css">
         <div class="grid panorama-message-box">
             <div class="row panorama-message-content">
-                <div data-bind="css: contentCss, text: content"></div>
+                <!-- ko if: $data.contentText -->
+                <div data-bind="css: contentCss, text: contentText"></div>
+                <!-- /ko -->
+                <!-- ko if: $data.contentTemplate -->
+                <div class="span10" data-bind="template: { name: contentTemplate, data: content || {} }"></div>
+                <!-- /ko -->
                 <!-- ko if: buttonsCss -->
                 <div data-bind="css: buttonsCss">
                     <!-- ko foreach: buttons -->

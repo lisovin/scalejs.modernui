@@ -42,10 +42,10 @@ define([
 
             function renderContent() {
                 // non-tiles content
-                if (ctx.$data.contentTemplate) {
+                if (ctx.$data.contentTemplate || ctx.$parent.pageTemplate) {
                     return {
                         template: {
-                            name: ctx.$data.contentTemplate,
+                            name: ctx.$data.contentTemplate || ctx.$parent.pageTemplate,
                             data: ctx.$data.content,
                             afterRender: afterRender
                         }

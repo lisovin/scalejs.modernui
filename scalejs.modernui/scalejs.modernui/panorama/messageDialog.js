@@ -20,6 +20,9 @@ define([
     var registerBindings = core.mvvm.registerBindings,
         statechart = core.state.builder.statechart,
         state = core.state.builder.state,
+        on = core.state.builder.on,
+        onEntry = core.state.builder.onEntry,
+        goto = core.state.builder.goto,
         get = core.object.get,
         is = core.type.is;
 
@@ -45,44 +48,45 @@ define([
         popupStatechart = statechart(
             state('popup',
                 // Popup closed
-                state('closed')
-                .on('showing.dialog').goto('dialog')
-                .on('showing.bar').goto('bar')
-                .on(function () { return this.isShowDialogPending; }).goto('dialog')
-                .on(function () { return this.isShowBarPending; }).goto('bar'),
+                state('closed',
+                    on('showing.dialog', goto('dialog')),
+                    on('showing.bar', goto('bar')),
+                    on(function () { return this.isShowDialogPending; }, goto('dialog')),
+                    on(function () { return this.isShowBarPending; }, goto('bar'))),
 
                 // Popup shown
                 state('shown',
+                    on('closing', goto(function () { this.popup.close(); })),
+                    on('closed', goto('closed')),
                     // Message bar
-                    state('bar')
-                    .onEntry(function () {
-                        this.isShowBarPending = false;
-                        this.popup = createPopup({
-                            position: [0, 0],
-                            modal: false
-                        });
-                    })
-                    .on('showing.dialog').goto(function () {
-                        this.isShowDialogPending = true;
-                        this.raise({name: 'closing'});
-                    }),
+                    state('bar',
+                        onEntry(function () {
+                            this.isShowBarPending = false;
+                            this.popup = createPopup({
+                                position: [0, 0],
+                                modal: false
+                            });
+                        }),
+                        on('showing.dialog', goto(function () {
+                            this.isShowDialogPending = true;
+                            this.raise({name: 'closing'});
+                        }))),
 
                     // Message dialog
-                    state('dialog')
-                    .onEntry(function () {
-                        this.isShowDialogPending = false;
-                        this.popup = createPopup({
-                            position: [0, 'auto'],
-                            modal: true,
-                            modalClose: false
-                        });
-                    })
-                    .on('showing.bar').goto('bar', function () {
-                        this.isShowBarPending = true;
-                        this.raise({name: 'closing'});
-                    }))
-                .on('closing').goto(function () { this.popup.close(); })
-                .on('closed').goto('closed'))
+                    state('dialog',
+                        onEntry(function () {
+                            this.isShowDialogPending = false;
+                            this.popup = createPopup({
+                                position: [0, 'auto'],
+                                modal: true,
+                                modalClose: false
+                            });
+                        }),
+                        on('showing.bar', goto('bar', function () {
+                            this.isShowBarPending = true;
+                            this.raise({name: 'closing'});
+                        }))))
+                )
         );
 
         popupStatechart.start();

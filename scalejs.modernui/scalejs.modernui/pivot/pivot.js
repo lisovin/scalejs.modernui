@@ -42,19 +42,19 @@ define([
     ) {
         var b = allBindingsAccessor(),
             opts = b.pivot,
-            pages = opts.pages;
+            pivotItems = opts.pivotItems;
 
         registerBindings(pivotBindings);
         registerTemplates(pivotTemplate);
 
         //if user didn't give us an observable to store selectedPage then make our own
-        if (!opts.selectedPage) {
-            opts.selectedPage = observable(pages()[0]);
+        if (!opts.selectedPivotItem) {
+            opts.selectedPivotItem = observable(pivotItems()[0]);
         }
 
         //if user provides empty observable for selectedPage then set it with the first one
-        if (!opts.selectedPage()) {
-            opts.selectedPage(pages()[0]);
+        if (!opts.selectedPivotItem()) {
+            opts.selectedPivotItem(pivotItems()[0]);
         }
 
         ko.applyBindingsToNode(element, { template: 'pivot_template' }, opts);
