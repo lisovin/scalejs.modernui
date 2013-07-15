@@ -21,19 +21,6 @@ define([
         registerTemplates = core.mvvm.registerTemplates,
         observable = ko.observable;
 
-    /*
-    pivot: {
-                pages: [{
-                    header: 'My page 1',
-                    contentHtml: '<h1>Test</h1>',
-                    content: {},
-                    contentTemplate: ''
-                }],
-                selectedPage: this.selectedPage
-            }
-
-    */
-
     /*jslint unparam: true*/
     function init(
         element,

@@ -2,14 +2,16 @@
 /*global define,document*/
 define([
     'scalejs.modernui/panorama/panorama',
-    'scalejs.modernui/panorama/tile',
+    'scalejs.modernui/tiles/tiles',
     'scalejs.modernui/pivot/pivot',
+    'scalejs.modernui/dropdown/dropdown',
     'knockout',
     'knockout.mapping'
 ], function (
     panorama,
-    tile,
+    tiles,
     pivot,
+    dropdown,
     ko
 ) {
 	/// <param name="$" value="window.$"/>
@@ -17,10 +19,11 @@ define([
     'use strict';
 
     ko.bindingHandlers.panorama = panorama;
-    ko.bindingHandlers.tile = tile;
+    ko.bindingHandlers.tiles = tiles;
     ko.bindingHandlers.pivot = pivot;
+    ko.bindingHandlers.dropdown = dropdown;
 
     ko.virtualElements.allowedBindings.panorama = true;
-    ko.virtualElements.allowedBindings.tile = true;
+    ko.virtualElements.allowedBindings.tiles = true;
 });
 

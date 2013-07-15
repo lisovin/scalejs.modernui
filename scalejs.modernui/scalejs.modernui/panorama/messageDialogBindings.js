@@ -14,7 +14,7 @@ define([
 
     return {
         'panorama-message': function (ctx) {
-            var messageOptions = unwrap(ctx.$data.message);
+            var messageOptions = unwrap(ctx.$data.messageOptions);
 
             if (messageOptions) {
                 return {

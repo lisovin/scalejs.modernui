@@ -9,6 +9,7 @@ var require = {
         "scalejs.mvvm":  "Scripts/scalejs.mvvm-0.2.3.2",
         "text":  "Scripts/text",
         "bPopup": "Scripts/jquery.bpopup",
+        "dropdown": "Scripts/dropdown",
         "scalejs.statechart-scion": "empty:",
         "scalejs.effects-jqueryui": "empty:"
     },

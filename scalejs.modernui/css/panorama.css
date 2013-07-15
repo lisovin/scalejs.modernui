@@ -1,17 +1,11 @@
-﻿.page.panorama .page-header .page-header-content
-{
-    height: 60px;
-    min-height: 60px;
+﻿.panorama.page {
+    position: absolute;
+    overflow-x: scroll;
+    overflow-y: hidden;
 }
-
-.page.panorama.fixed-header .page-region 
-{
-  padding-top: 50px;
-}
-
 .page.panorama.fixed-header .page-region-content
 {
-  padding-top: 0px;
+  padding-top: 0;
 }
 
 .page.panorama.fixed-header .back-button
@@ -62,4 +56,8 @@
 .panorama-message-content
 {
     text-align: left;
+}
+
+.tile-container {
+    position: absolute
 }

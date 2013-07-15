@@ -1,19 +1,18 @@
 ﻿/// <reference path="../scripts/_references.js" />
-/*global console,define,setTimeout*/
+/*global console,define,setTimeout,window*/
 /*jslint unparam: true*/define([
     'scalejs!core',
     './panoramaBindings',
-    './panoramaLayout',
     'text!./panorama.html',
     './messageDialog',
     'jQuery',
     'knockout',
     'bPopup',
-    'scalejs.mvvm'
+    'scalejs.mvvm',
+    'dropdown'
 ], function (
     core,
     panoramaBindings,
-    panoramaLayout,
     panoramaTemplate,
     messageDialog,
     $,
@@ -23,78 +22,156 @@
     'use strict';
     var registerBindings = core.mvvm.registerBindings,
         registerTemplates = core.mvvm.registerTemplates,
-        isObservable = ko.isObservable;
-
-    function panorama(options, element) {
-        var has = core.object.has,
-            merge = core.object.merge,
-            //transitions,
-            self;
-
-        function selectPage(page) {
-            if (isObservable(options.selectedPage)) {
-                options.selectedPage(page);
-            }
-        }
-
-        function doLayout() {
-            panoramaLayout.doLayout();
-        }
-
-        self = merge(options, {
-            selectPage: selectPage,
-            isBackButtonVisible: options.canBack,
-            doLayout: doLayout
-            //afterRender: afterRender
-        });
-
-        if (has(options, 'message')) {
-            self.message = messageDialog(options.message, element);
-        }
-
-        return self;
-    }
+        isObservable = ko.isObservable,
+        unwrap = ko.utils.unwrapObservable,
+        toEnumerable = core.linq.enumerable.from,
+        has = core.object.has;
 
     function wrapValueAccessor(valueAccessor, element) {
         return function () {
-            var options = valueAccessor(),
-                myPanorama = panorama(options, element);
+            var panorama = valueAccessor();
+
+            function setupSelectPage() {
+                //triggered when clicked on header
+                panorama.selectPage = function (page) {
+                    if (isObservable(panorama.selectedPage)) {
+                        panorama.selectedPage(page);
+                    }
+                };
+            }
+
+            function setupPages() {
+                //the user may or may not specify a pages observabl when specifying tiles...
+                //if they don't, we need to make one since we layout tiles via pages.
+                if (!has(panorama, 'pages')) {
+                    panorama.pages = ko.observableArray();
+                }
+            }
+
+            function setupTiles() {
+                var pages;
+                //group the tiles into pages, if there is no "group by" specified, we make a single page...
+                function groupTilesToPages(tiles) {
+
+                    if (!has(panorama, 'groupBy')) {
+                        return [{ tiles: tiles }];
+                    }
+
+                    //straightforward linq grouping of tiles are passed to the pages...
+                    return toEnumerable(tiles)
+                        .groupBy(panorama.groupBy)
+                        .select(function (tileGroup) {
+                            return {
+                                header: tileGroup.key(),
+                                tiles: tileGroup.getSource()
+                            };
+                        })
+                        .toArray();
+                }
+
+                if (has(panorama, 'tiles')) {
+                    if (isObservable(panorama.tiles)) {
+                        ko.computed({
+                            read: function () {
+                                pages = groupTilesToPages(unwrap(panorama.tiles));
+                                panorama.pages(pages);
+                            },
+                            disposeWhenNodeIsRemoved: element
+                        });
+                    } else {
+                        pages = groupTilesToPages(unwrap(panorama.tiles));
+                        panorama.pages(pages);
+                    }
+                }
+            }
+
+            function setupMessageDialog() {
+                if (has(panorama, 'message')) {
+                    if (!isObservable(panorama.message)) {
+                        throw new Error('`message` property of panorama must be an observable');
+                    }
+                    panorama.messageOptions = messageDialog(panorama.message, element);
+                }
+            }
+
+            setupSelectPage();
+            setupPages();
+            setupTiles();
+            setupMessageDialog();
+
+            panorama.loaded = ko.observable(false);
 
             return {
                 name: 'panorama_template',
-                data: myPanorama,
-                afterRender: myPanorama.afterRender
+                data: panorama
             };
-
         };
     }
 
-    function init(        element,        valueAccessor,        allBindingsAccessor,        viewModel,        bindingContext    ) {
-        return { 'controlsDescendantBindings' : true };
-    }
-
-    function update(
+    function init(
         element,
         valueAccessor,
         allBindingsAccessor,
         viewModel,
         bindingContext
     ) {
-        return ko.bindingHandlers.template.update(
-            element,
-            wrapValueAccessor(valueAccessor, element),
-            allBindingsAccessor,
-            viewModel,
-            bindingContext
-        );
+        var panorama = valueAccessor(),
+            unitWidth = panorama.unitWidth || 150,
+            result = ko.bindingHandlers.template.update(
+                element,
+                wrapValueAccessor(valueAccessor, element),
+                allBindingsAccessor,
+                viewModel,
+                bindingContext
+            );
+
+        function doLayout() {
+            //TODO: query for this -> move outside of function (only needs to be done once)
+            var pageRegionWidth = 120, //.page-region-content padding-left value
+                $tilesContainers = $('.tiles-container');
+
+            if ($tilesContainers.length > 0) {
+                $tilesContainers.each(function (index, tileContainer) {
+                    var context = ko.contextFor(tileContainer.children[0]).$parentContext,
+                        page = context.$data,
+                        width = page.layout(unitWidth);
+
+                    pageRegionWidth += width + 80;
+
+                    $(tileContainer).width(width);
+                });
+
+                pageRegionWidth += "px";
+            } else {
+                pageRegionWidth = "auto";
+            }
+
+            $('.page-region-content').css('width', pageRegionWidth);
+            panorama.loaded(true);
+        }
+
+        ko.computed({
+            read: function () {
+                setTimeout(doLayout, 0);
+                return unwrap(panorama.pages);
+            },
+            disposeWhenNodeIsRemoved: element
+        });
+
+
+        //TODO: why is setTimeout needed?
+        $(window).resize(function () {
+            setTimeout(doLayout, 0);
+        });
+
+        return result;
     }
 
     registerBindings(panoramaBindings);
     registerTemplates(panoramaTemplate);
 
     return {
-        init: init,
-        update: update
+        init: init
     };
 });
 /*jslint unparam: false*/

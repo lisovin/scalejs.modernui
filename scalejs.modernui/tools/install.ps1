@@ -5,10 +5,14 @@ $project |
 		'scalejs.modernui' : 'Scripts/scalejs.modernui-$($package.Version)',
 		'knockout'			: 'Scripts/knockout-2.2.1',
 		'knockout.mapping'	: 'Scripts/knockout.mapping-latest',
-		'bPopup'			: 'Scripts/jquery.bpopup'
+		'bPopup'			: 'Scripts/jquery.bpopup',
+		'dropdown'			: 'Scripts/dropdown'
 	}" |
 	Add-Shims "{
 		'bPopup'			: {
+			deps: ['jQuery']
+		},
+		'dropdown'			: {
 			deps: ['jQuery']
 		}
 	}" |

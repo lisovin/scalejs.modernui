@@ -1,20 +1,19 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define*/
 define([
-    //'scalejs!core',
     'knockout'
-], function (
-    //core,
-    ko
-) {
+], function () {
     'use strict';
-
-    var unwrap = ko.utils.unwrapObservable;
 
     return {
         'panorama-pages': function () {
             return {
                 foreach: this.pages
+            };
+        },
+        'panorama-page-region': function () {
+            return {
+                visible: this.loaded
             };
         },
         'panorama-header-content': function () {
@@ -36,55 +35,22 @@ define([
         },
 
         'panorama-page-content': function (ctx) {
-            function afterRender() {
-                ctx.$parent.doLayout();
-            }
-
             function renderContent() {
-                // non-tiles content
                 if (ctx.$data.contentTemplate || ctx.$parent.pageTemplate) {
                     return {
                         template: {
                             name: ctx.$data.contentTemplate || ctx.$parent.pageTemplate,
-                            data: ctx.$data.content,
-                            afterRender: afterRender
+                            data: ctx.$data.content
                         }
                     };
                 }
 
                 return {
                     render: {
-                        text: JSON.stringify(ctx.$data.content),
-                        afterRender: afterRender
+                        text: JSON.stringify(ctx.$data.content)
                     }
                 };
             }
-
-            /*jslint unparam:true*/
-            function renderTiles() {
-                var tiles = unwrap(ctx.$data.tiles) || [],
-                    tileTemplate = unwrap(ctx.$data.tileTemplate) || 'sj_panorama_tile_template',
-                    lastTile = tiles[tiles.length - 1];
-                /*
-                    content = selectableArray(tiles, {
-                        selectedItem: ctx.selectedTile,
-                        selectionPolicy: 'deselect',
-                        afterRender: afterRender
-                    });*/
-                return {
-                    template: {
-                        name: tileTemplate,
-                        foreach: tiles,
-
-                        afterRender: function (nodes, item) {
-                            if (item === lastTile) {
-                                afterRender();
-                            }
-                        }
-                    }
-                };
-            }
-            /*jslint unparam:false*/
 
             if (this.content) {
                 return renderContent();
@@ -92,7 +58,13 @@ define([
 
             // tiles
             if (this.tiles) {
-                return renderTiles();
+                return {
+                    tiles: {
+                        data: this.tiles,
+                        template: ctx.$parent.tileTemplate || 'sj_panorama_tile_template',
+                        pageNum: ctx.$index() //TODO: Do I need This? 
+                    }
+                };
             }
 
             // default
@@ -100,7 +72,6 @@ define([
                 text: ctx.$data
             };
         },
-
         'panorama-page-header': function () {
             return {
                 text: this.header
@@ -115,7 +86,7 @@ define([
         'panorama-back-button' : function () {
             return {
                 click: this.goBack,
-                visible: this.isBackButtonVisible
+                visible: this.canBack
             };
         }
     };
