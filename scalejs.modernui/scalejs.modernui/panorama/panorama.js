@@ -146,7 +146,12 @@
                 pageRegionWidth = "auto";
             }
 
-            $('.page-region-content').css('width', pageRegionWidth);
+            if (panorama.tiles().length > 0) {
+                $('.page-region-content').css('width', pageRegionWidth);
+            } else {
+                $('.page-region-content').css('width', 'auto');
+            }
+
             panorama.loaded(true);
         }
 

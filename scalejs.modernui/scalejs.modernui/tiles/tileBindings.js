@@ -1,22 +1,43 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define*/
-define(['scalejs!core'], function (core) {
+define(['scalejs!core', 'knockout'], function (core, ko) {
     'use strict';
 
-    var get = core.object.get;
+    var get = core.object.get,
+        unwrap = ko.utils.unwrapObservable,
+        isObservable = ko.isObservable;
 
     return {
         'panorama-tile': function (ctx) {
-            var unitWidth = ctx.$parentContext.$parentContext.$parent.unitWidth
+            var unitWidth = ctx.$parentContext.$parentContext.$parent.unitWidth,
+                selectedTile = ctx.$parentContext.$data.selectedTile,
+                tile = this,
+                css;
+
+            css = {
+                'selected': computed(function () {
+                    return unwrap(selectedTile) === tile;
+                })
+            };
+
+            css['bg-color-' + this.bgColor] = true;
+
             return {
                 style: {
                     width: this.width * unitWidth - 10,
                     height: this.height * unitWidth - 10,
-                    position: 'absolute',
-                    backgroundColor: this.color
+                    position: 'absolute'
                 },
-                css: 'bg-color-' + this.bgColor,
-                click: this.selectTile
+                css: css,
+                click: this.selectTile || function () {
+                    if (isObservable(selectedTile)) {
+                        if (unwrap(selectedTile) === this) {
+                            selectedTile(undefined);
+                        } else {
+                            selectedTile(this)
+                        }
+                    }
+                }
             };
         },
 
