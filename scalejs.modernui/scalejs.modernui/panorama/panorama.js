@@ -146,7 +146,7 @@
                 pageRegionWidth = "auto";
             }
 
-            if (panorama.tiles().length > 0) {
+            if (has(panorama.tiles()) && panorama.tiles().length > 0) {
                 $('.page-region-content').css('width', pageRegionWidth);
             } else {
                 $('.page-region-content').css('width', 'auto');
