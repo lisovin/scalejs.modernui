@@ -5,7 +5,8 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
 
     var get = core.object.get,
         unwrap = ko.utils.unwrapObservable,
-        isObservable = ko.isObservable;
+        isObservable = ko.isObservable,
+        computed = ko.computed;
 
     return {
         'panorama-tile': function (ctx) {
