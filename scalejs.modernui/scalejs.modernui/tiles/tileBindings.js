@@ -10,24 +10,25 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
 
     return {
         'panorama-tile': function (ctx) {
-            var unitWidth = ctx.$parentContext.$parentContext.$parent.unitWidth,
+            var unitWidth = ctx.$parentContext.$parentContext.$parent.unitWidth ||
+                    ctx.$parentContext.$parentContext.$parentContext.$parent.unitWidth,
                 selectedTile = ctx.$parentContext.$parent.selectedTile,
                 tile = this,
                 css;
 
-            css = {
-                'selected': computed(function () {
-                    return unwrap(selectedTile) === tile;
-                })
-            };
-
-            css['bg-color-' + this.bgColor] = true;
+            css = computed(function () {
+                var selected = unwrap(tile.selected) || unwrap(selectedTile) === tile ? 'selected ' : '';
+                return selected + 'bg-color-' + unwrap(tile.bgColor);
+            });
 
             return {
                 style: {
                     width: this.width * unitWidth - 10,
                     height: this.height * unitWidth - 10,
-                    position: 'absolute'
+                    position: 'absolute',
+                },
+                attr: {
+                    disabled: this.disabled
                 },
                 css: css,
                 click: this.selectTile || function () {
@@ -35,7 +36,7 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
                         if (unwrap(selectedTile) === this) {
                             selectedTile(undefined);
                         } else {
-                            selectedTile(this)
+                            selectedTile(this);
                         }
                     }
                 }
@@ -55,7 +56,7 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
 
         'panorama-tile-content-default-html': function (context) {
             return {
-                text: JSON.stringify(context.$data)
+                html: context.$data
             };
         },
 

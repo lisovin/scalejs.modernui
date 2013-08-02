@@ -5,6 +5,7 @@ define([
     'scalejs.modernui/tiles/tiles',
     'scalejs.modernui/pivot/pivot',
     'scalejs.modernui/dropdown/dropdown',
+    'scalejs.modernui/accordion/accordion',
     'knockout',
     'knockout.mapping'
 ], function (
@@ -12,6 +13,7 @@ define([
     tiles,
     pivot,
     dropdown,
+    accordion,
     ko
 ) {
 	/// <param name="$" value="window.$"/>
@@ -22,6 +24,7 @@ define([
     ko.bindingHandlers.tiles = tiles;
     ko.bindingHandlers.pivot = pivot;
     ko.bindingHandlers.dropdown = dropdown;
+    ko.bindingHandlers.accordion = accordion;
 
     ko.virtualElements.allowedBindings.panorama = true;
     ko.virtualElements.allowedBindings.tiles = true;

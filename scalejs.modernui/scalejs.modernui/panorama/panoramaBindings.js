@@ -11,6 +11,11 @@ define([
                 foreach: this.pages
             };
         },
+        'panorama-page': function () {
+            return {
+                css: this.css
+            };
+        },
         'panorama-page-region': function () {
             return {
                 visible: this.loaded

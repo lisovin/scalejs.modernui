@@ -15,6 +15,8 @@
     <Content Include="css\theme-dark.css" />
     <Content Include="fonts\iconFont.svg" />
     <Content Include="fonts\license.txt" />
+    <Content Include="scalejs.modernui\accordion\accordion.js" />
+    <Content Include="scalejs.modernui\accordion\accordionBindings.js" />
     <Content Include="scalejs.modernui\dropdown\dropdown.js" />
     <Content Include="scalejs.modernui\dropdown\dropdownBindings.js" />
     <Content Include="scalejs.modernui\tiles\front.js" />
@@ -38,6 +40,7 @@
     <Content Include="scalejs.modernui\pivot\pivot.js" />
     <Content Include="scalejs.modernui\pivot\pivot.html" />
     <Content Include="scalejs.modernui\pivot\pivotBindings.js" />
+    <Content Include="Scripts\accordion.js" />
     <Content Include="Scripts\dropdown.js" />
     <Content Include="Scripts\es5-shim.js" />
     <Content Include="Scripts\es5-shim.min.js" />
@@ -65,7 +68,6 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <ScalejsProjectType>Extension</ScalejsProjectType>
   </PropertyGroup>

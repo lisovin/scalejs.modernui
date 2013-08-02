@@ -10,6 +10,7 @@ var require = {
         "text":  "Scripts/text",
         "bPopup": "Scripts/jquery.bpopup",
         "dropdown": "Scripts/dropdown",
+        "accordion": "Scripts/accordion",
         "scalejs.statechart-scion": "empty:",
         "scalejs.effects-jqueryui": "empty:"
     },

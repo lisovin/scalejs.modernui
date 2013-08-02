@@ -32,9 +32,9 @@ define(['scalejs!core'], function (
         //returns an object with a bool indicating if it was found and the index.
         function findKey(allValues, xory, v) {
             var l = 0,
-            u = allValues.length - 1,
-            m,
-            vs;
+                u = allValues.length - 1,
+                m,
+                vs;
 
             while (u >= l) {
                 m = (l + u) / 2 | 0;
@@ -133,8 +133,8 @@ define(['scalejs!core'], function (
         // --> x + width >= point.x
         function findLeftPoints(point) {
             var key = {},
-             numYs,
-             left = [];
+                numYs,
+                left = [];
 
             key.y = findKey(yxss, 'y', point.y);
 

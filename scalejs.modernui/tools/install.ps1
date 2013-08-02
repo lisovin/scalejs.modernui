@@ -6,13 +6,17 @@ $project |
 		'knockout'			: 'Scripts/knockout-2.2.1',
 		'knockout.mapping'	: 'Scripts/knockout.mapping-latest',
 		'bPopup'			: 'Scripts/jquery.bpopup',
-		'dropdown'			: 'Scripts/dropdown'
+		'dropdown'			: 'Scripts/dropdown',
+		'accordion'			: 'Scripts/accordion'
 	}" |
 	Add-Shims "{
 		'bPopup'			: {
 			deps: ['jQuery']
 		},
 		'dropdown'			: {
+			deps: ['jQuery']
+		},
+		'accordion'			: {
 			deps: ['jQuery']
 		}
 	}" |

@@ -49,26 +49,27 @@
 
     /* --- layout -- */
     
-    function layout(tiles, element, unitWidth) {
+    function layout(tiles, element, unitWidth, pageHeight) {
         var pageWidth;
 
-        tileLayout.calculate(tiles, unitWidth);
+        tileLayout.calculate(tiles, unitWidth, pageHeight);
 
         pageWidth = updateTilePositions(tiles, element);
 
         return pageWidth;
     }
 
-    function wrapValueAccessor(valueAccessor, element) {
+    function wrapValueAccessor(valueAccessor, element, allBindingsAccessor) {
         return function () {
             var opts = valueAccessor(),
-                tiles = unwrap(opts.data);
+                tiles = unwrap(opts.data),
+                b = allBindingsAccessor();
 
             return {
                 name: 'sj_tiles_container',
                 data: {
                     tiles: tiles,
-                    layout: function (unitWidth) { return layout(tiles, element, unitWidth); }
+                    layout: function (unitWidth) { return layout(tiles, element, unitWidth, b.pageHeight); }
                 }
             };
         };
@@ -84,7 +85,7 @@
     ) {
         return ko.bindingHandlers.template.update(
             element,
-            wrapValueAccessor(valueAccessor, element),
+            wrapValueAccessor(valueAccessor, element, allBindingsAccessor),
             allBindingsAccessor,
             viewModel,
             bindingContext

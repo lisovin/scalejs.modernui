@@ -8,6 +8,7 @@
 		'knockout.mapping',
 		'scalejs.mvvm',
 		'bPopup',
-		'dropdown'
+		'dropdown',
+		'accordion'
     ]
 })

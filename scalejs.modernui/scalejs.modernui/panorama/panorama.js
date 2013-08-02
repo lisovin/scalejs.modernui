@@ -33,7 +33,7 @@
 
             function setupSelectPage() {
                 //triggered when clicked on header
-                panorama.selectPage = function (page) {
+                panorama.selectPage = panorama.selectPage || function (page) {
                     if (isObservable(panorama.selectedPage)) {
                         panorama.selectedPage(page);
                     }
@@ -132,9 +132,9 @@
 
             if ($tilesContainers.length > 0) {
                 $tilesContainers.each(function (index, tileContainer) {
-                    var context = ko.contextFor(tileContainer.children[0]).$parentContext,
-                        page = context.$data,
-                        width = page.layout(unitWidth);
+                    var context = ko.contextFor(tileContainer.children[0] || tileContainer).$parentContext,
+                        page = has(context.$data.layout) ? context.$data : ko.contextFor(tileContainer).$data,
+                        width = has(page.layout) ? page.layout(unitWidth) : 0;
 
                     pageRegionWidth += width + 80;
 
@@ -157,6 +157,7 @@
 
         ko.computed({
             read: function () {
+                panorama.loaded(false);
                 setTimeout(doLayout, 0);
                 return unwrap(panorama.pages);
             },

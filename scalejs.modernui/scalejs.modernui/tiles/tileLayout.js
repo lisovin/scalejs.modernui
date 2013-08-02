@@ -150,8 +150,8 @@
     }
 
     function getPageHeight() {
-        var $group = $($(".tile-group").get(0));
-        pageHeight = $(".page-region-content").outerHeight();
+        var $group = $($(".tile-group").get(0)),
+            pageHeight = $(".page-region-content").outerHeight();
         yOffset = $group.offset().top;
         if (window.innerHeight < yOffset + pageHeight) {
             pageHeight = window.innerHeight - yOffset - 10;
@@ -160,9 +160,8 @@
     }
 
     //  Finds the optimal Tile Placement which will fit in the screen
-    function calculate(tiles, u) {
-        var masonryWidth,
-            pageHeight;
+    function calculate(tiles, u, pageHeight) {
+        var masonryWidth;
 
         unitWidth = u;
 
@@ -190,7 +189,7 @@
             return acc + getDimension(tile, "width");
         }, 0);
 
-        pageHeight = getPageHeight();
+        pageHeight = pageHeight || getPageHeight();
 
         // find the most optimal width (e.g. so that all tiles fit to pageHeight)
         masonryWidth = findMasonryWidth(0, masonryWidth);
