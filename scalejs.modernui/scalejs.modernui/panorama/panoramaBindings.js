@@ -8,7 +8,13 @@ define([
     return {
         'panorama-pages': function () {
             return {
-                foreach: this.pages
+                render: {
+                    template: {
+                        name: "panorama_page_template",
+                        foreach: this.pages
+                    },
+                    transitions: this.transitions
+                }
             };
         },
         'panorama-page': function () {

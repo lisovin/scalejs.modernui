@@ -1,6 +1,7 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global console,define,setTimeout,window*/
-/*jslint unparam: true*/define([
+/*jslint unparam: true*/
+define([
     'scalejs!core',
     './panoramaBindings',
     'text!./panorama.html',
@@ -27,7 +28,7 @@
         toEnumerable = core.linq.enumerable.from,
         has = core.object.has;
 
-    function wrapValueAccessor(valueAccessor, element) {
+    function wrapValueAccessor(valueAccessor, element, layout) {
         return function () {
             var panorama = valueAccessor();
 
@@ -94,10 +95,21 @@
                 }
             }
 
+            function setupTransitions() {
+                if (has(panorama.transitions, 'inTransitions')) {
+                    panorama.transitions.inTransitions.unshift(layout);
+                } else {
+                    panorama.transitions = merge(panorama.transitions, {
+                        inTransitions: [layout]
+                    });
+                }
+            }
+
             setupSelectPage();
             setupPages();
             setupTiles();
             setupMessageDialog();
+            setupTransitions();
 
             panorama.loaded = ko.observable(false);
 
@@ -117,13 +129,8 @@
     ) {
         var panorama = valueAccessor(),
             unitWidth = panorama.unitWidth || 150,
-            result = ko.bindingHandlers.template.update(
-                element,
-                wrapValueAccessor(valueAccessor, element),
-                allBindingsAccessor,
-                viewModel,
-                bindingContext
-            );
+            result,
+            layout;
 
         function doLayout() {
             //TODO: query for this -> move outside of function (only needs to be done once)
@@ -155,6 +162,20 @@
             panorama.loaded(true);
         }
 
+        layout = function (complete) {
+            doLayout();
+            complete();
+        };
+
+        result = ko.bindingHandlers.template.update(
+            element,
+            wrapValueAccessor(valueAccessor, element),
+            allBindingsAccessor,
+            viewModel,
+            bindingContext
+        );
+
+        /*
         ko.computed({
             read: function () {
                 panorama.loaded(false);
@@ -162,7 +183,7 @@
                 return unwrap(panorama.pages);
             },
             disposeWhenNodeIsRemoved: element
-        });
+        });*/
 
 
         //TODO: why is setTimeout needed?

@@ -1,6 +1,7 @@
 ﻿/// <reference path="../scripts/_references.js" />
 /*global define,console,window*/
-/*jslint unparam: true*/define([
+/*jslint unparam: true*/
+define([
     'scalejs!core',
     'jQuery',
     'knockout',

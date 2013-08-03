@@ -9,13 +9,7 @@
         </div>
         <div class="page-region">
             <div class="page-region-content tiles" data-class="panorama-page-region">
-                <!-- ko class: panorama-pages -->
-                <div class="tile-group tile-drag" data-class="panorama-page" style="width: auto"> 
-                    <h3 class="subtitle" data-class="panorama-page-header panorama-page-selectable"></h3>
-                    <!-- ko class: panorama-page-content -->
-                    <!-- /ko -->
-                </div>
-                <!-- /ko -->
+                <div data-class="panorama-pages"></div>
             </div>
         </div>
     </div> 
@@ -23,6 +17,14 @@
     <div id="panorama-message">
     <!-- ko class: panorama-message -->
     <!-- /ko -->
+    </div>
+</div>
+
+<div id="panorama_page_template">
+    <div class="tile-group tile-drag" data-class="panorama-page" style="width: auto"> 
+        <h3 class="subtitle" data-class="panorama-page-header panorama-page-selectable"></h3>
+        <!-- ko class: panorama-page-content -->
+        <!-- /ko -->
     </div>
 </div>
 
