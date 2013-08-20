@@ -18,7 +18,7 @@ define([
 
     //  aliases
     var//  variables
-        unitWidth = 150,
+        unitWidth = 140,
         isDebug = false,
         yOffset,
         front;
@@ -155,7 +155,7 @@ define([
             pageHeight = $(".page-region-content").outerHeight();
         yOffset = $group.offset().top;
         if (window.innerHeight < yOffset + pageHeight) {
-            pageHeight = window.innerHeight - yOffset - 10;
+            pageHeight = window.innerHeight - yOffset - 44; //accounts for *page* header (this obviously should be done better)
         }
         return pageHeight;
     }
@@ -164,7 +164,7 @@ define([
     function calculate(tiles, u, pageHeight) {
         var masonryWidth;
 
-        unitWidth = u;
+        unitWidth = u || unitWidth;
 
         function findMasonryWidth(l, r) {
             var m = Math.floor((l + r) / 2),

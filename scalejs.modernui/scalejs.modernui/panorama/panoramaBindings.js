@@ -2,29 +2,33 @@
 /*global console,define*/
 define([
     'knockout'
-], function () {
-    'use strict';
+], function (ko) {
+    var unwrap = ko.utils.unwrapObservable;
 
     return {
-        'panorama-pages': function () {
-            return {
-                render: {
-                    template: {
-                        name: "panorama_page_template",
-                        foreach: this.pages
-                    },
-                    transitions: this.transitions
-                }
-            };
-        },
         'panorama-page': function () {
             return {
                 css: this.css
             };
         },
         'panorama-page-region': function () {
+            var pages = unwrap(this.pages);
+
+            if (!pages || pages.length === 0) {
+                return;
+            }
+
             return {
-                visible: this.loaded
+                render: {
+                    template: {
+                        name: "panorama_page_template",
+                        foreach: pages
+                    },
+                    transitions: this.transitions
+                },
+                attr: {
+                    style: 'visibility:hidden'
+                }
             };
         },
         'panorama-header-content': function () {
@@ -63,6 +67,10 @@ define([
                 };
             }
 
+            if (!ctx.$data) {
+                return;
+            }
+
             if (this.content) {
                 return renderContent();
             }
@@ -72,9 +80,10 @@ define([
                 return {
                     tiles: {
                         data: this.tiles,
-                        template: ctx.$parent.tileTemplate || 'sj_panorama_tile_template',
-                        pageNum: ctx.$index() //TODO: Do I need This? 
-                    }
+                        template: ctx.$parent.tileTemplate || 'sj_panorama_tile_template'
+                    },
+                    unitWidth: this.unitWidth,
+                    pageHeight: this.pageHeight
                 };
             }
 
@@ -94,7 +103,7 @@ define([
                 click: data.$parent.selectPage
             };
         },
-        'panorama-back-button' : function () {
+        'panorama-back-button': function () {
             return {
                 click: this.goBack,
                 visible: this.canBack
@@ -102,4 +111,3 @@ define([
         }
     };
 });
-

@@ -22,15 +22,16 @@ define([
     /// <param name="ko" value="window.ko"/>
     'use strict';
     var registerBindings = core.mvvm.registerBindings,
-        registerTemplates = core.mvvm.registerTemplates,
-        isObservable = ko.isObservable,
-        unwrap = ko.utils.unwrapObservable,
-        toEnumerable = core.linq.enumerable.from,
-        has = core.object.has;
+       registerTemplates = core.mvvm.registerTemplates,
+       isObservable = ko.isObservable,
+       unwrap = ko.utils.unwrapObservable,
+       toEnumerable = core.linq.enumerable.from,
+       has = core.object.has;
 
     function wrapValueAccessor(valueAccessor, element, layout) {
         return function () {
-            var panorama = valueAccessor();
+            var panorama = valueAccessor(),
+                tilesSubscription;
 
             function setupSelectPage() {
                 //triggered when clicked on header
@@ -64,7 +65,8 @@ define([
                         .select(function (tileGroup) {
                             return {
                                 header: tileGroup.key(),
-                                tiles: tileGroup.getSource()
+                                tiles: tileGroup.getSource(),
+                                unitWidth: panorama.unitWidth
                             };
                         })
                         .toArray();
@@ -72,12 +74,13 @@ define([
 
                 if (has(panorama, 'tiles')) {
                     if (isObservable(panorama.tiles)) {
-                        ko.computed({
-                            read: function () {
-                                pages = groupTilesToPages(unwrap(panorama.tiles));
-                                panorama.pages(pages);
-                            },
-                            disposeWhenNodeIsRemoved: element
+                        tilesSubscription = panorama.tiles.subscribe(function (tiles) {
+                            var pages = groupTilesToPages(unwrap(panorama.tiles));
+                            panorama.pages(pages);
+                        });
+
+                        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+                            tilesSubscription.dispose();
                         });
                     } else {
                         pages = groupTilesToPages(unwrap(panorama.tiles));
@@ -111,8 +114,6 @@ define([
             setupMessageDialog();
             setupTransitions();
 
-            panorama.loaded = ko.observable(false);
-
             return {
                 name: 'panorama_template',
                 data: panorama
@@ -128,77 +129,75 @@ define([
         bindingContext
     ) {
         var panorama = valueAccessor(),
+            pages = panorama.pages,
             unitWidth = panorama.unitWidth || 150,
+            redoLayout,
+            calculateWidth,
             result,
             layout;
 
-        function doLayout() {
-            //TODO: query for this -> move outside of function (only needs to be done once)
-            var pageRegionWidth = 120, //.page-region-content padding-left value
-                $tilesContainers = $('.tiles-container');
+        function doLayout(isLayedOut) {
+            return function () {
+                var pageRegionWidth = 120, //.page-region-content padding-left value
+                    $tilesContainers = $('.tiles-container'),
+                    layoutWidth = isLayedOut ? 'width' : 'layout';
 
-            if ($tilesContainers.length > 0) {
-                $tilesContainers.each(function (index, tileContainer) {
-                    var context = ko.contextFor(tileContainer.children[0] || tileContainer).$parentContext,
-                        page = has(context.$data.layout) ? context.$data : ko.contextFor(tileContainer).$data,
-                        width = has(page.layout) ? page.layout(unitWidth) : 0;
+                // layoutWidth is a property of the page which is eiter set to 'layout' or 'width'.
+                // if the page has already been layed out we only need to find the width,
+                // however if the page has not been layed out (IE on resize) we need to relayout the page.
+                if ($tilesContainers.length > 0) {
+                    $tilesContainers.each(function (index, tileContainer) {
+                        var context = ko.contextFor(tileContainer.children[0] || tileContainer).$parentContext,
+                            page = has(context.$data[layoutWidth]) ? context.$data : ko.contextFor(tileContainer).$data,
+                            width = has(page[layoutWidth]) ? page[layoutWidth]() : 0;
 
-                    pageRegionWidth += width + 80;
+                        pageRegionWidth += width + 80;
 
-                    $(tileContainer).width(width);
-                });
+                        $(tileContainer).width(width);
+                    });
 
-                pageRegionWidth += "px";
-            } else {
-                pageRegionWidth = "auto";
-            }
+                    pageRegionWidth += "px";
+                } else {
+                    pageRegionWidth = "auto";
+                }
 
-            if (has(panorama.tiles()) && panorama.tiles().length > 0) {
-                $('.page-region-content').css('width', pageRegionWidth);
-            } else {
-                $('.page-region-content').css('width', 'auto');
-            }
-
-            panorama.loaded(true);
+                if (has(panorama.tiles()) && panorama.tiles().length > 0) {
+                    $('.page-region-content').css('width', pageRegionWidth);
+                } else {
+                    $('.page-region-content').css('width', 'auto');
+                }
+                $('.page-region-content').css('visibility', 'visible');
+            };
         }
 
+        redoLayout = doLayout(false);
+        calculateWidth = doLayout(true);
+
         layout = function (complete) {
-            doLayout();
+            calculateWidth();
             complete();
         };
 
-        result = ko.bindingHandlers.template.update(
+        //TODO: why is setTimeout needed?
+        $(window).resize(function () {
+            setTimeout(redoLayout, 0);
+        });
+
+        ko.bindingHandlers.template.update(
             element,
-            wrapValueAccessor(valueAccessor, element),
+            wrapValueAccessor(valueAccessor, element, layout),
             allBindingsAccessor,
             viewModel,
             bindingContext
         );
-
-        /*
-        ko.computed({
-            read: function () {
-                panorama.loaded(false);
-                setTimeout(doLayout, 0);
-                return unwrap(panorama.pages);
-            },
-            disposeWhenNodeIsRemoved: element
-        });*/
-
-
-        //TODO: why is setTimeout needed?
-        $(window).resize(function () {
-            setTimeout(doLayout, 0);
-        });
-
-        return result;
+        //return result;
     }
 
     registerBindings(panoramaBindings);
     registerTemplates(panoramaTemplate);
 
     return {
-        init: init
+        update: init
     };
 });
 /*jslint unparam: false*/

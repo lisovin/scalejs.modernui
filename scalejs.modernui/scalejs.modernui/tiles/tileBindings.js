@@ -23,8 +23,8 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
 
             return {
                 style: {
-                    width: this.width * unitWidth - 10,
-                    height: this.height * unitWidth - 10,
+                    width: this.width * unitWidth - 10 + 'px',
+                    height: this.height * unitWidth - 10 + 'px',
                     position: 'absolute',
                 },
                 attr: {

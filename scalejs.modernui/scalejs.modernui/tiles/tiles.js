@@ -35,13 +35,16 @@ define([
 
     // transforms css of tiles
     function updateTilePositions(tiles, element) {
-        $(element.parentElement).find('.tile').each(function (index, tileElement) {
+        $(element).parent().find('.tile').each(function (index, tileElement) {
             var tileContext, tileData;
             tileContext = ko.contextFor(tileElement);
             tileData = tileContext.$data;
 
             $(tileElement).css({
-                '-webkit-transform': 'translate(' + (tileData.left) + 'px, ' + (tileData.top) + 'px)'
+                '-webkit-transform': 'translate(' + (tileData.left) + 'px, ' + (tileData.top) + 'px)',
+                '-ms-transform': 'translate(' + (tileData.left) + 'px, ' + (tileData.top) + 'px)',
+                '-moz-transform': 'translate(' + (tileData.left) + 'px, ' + (tileData.top) + 'px)',
+                'transform:': 'translate(' + (tileData.left) + 'px, ' + (tileData.top) + 'px)'
             });
         });
 
@@ -64,13 +67,18 @@ define([
         return function () {
             var opts = valueAccessor(),
                 tiles = unwrap(opts.data),
-                b = allBindingsAccessor();
+                b = allBindingsAccessor(),
+                width = ko.observable(0);
 
             return {
                 name: 'sj_tiles_container',
                 data: {
                     tiles: tiles,
+                    width: width,
                     layout: function (unitWidth) { return layout(tiles, element, unitWidth, b.pageHeight); }
+                },
+                afterRender: function () {
+                    width(layout(tiles, element, b.unitWidth, b.pageHieght));
                 }
             };
         };
