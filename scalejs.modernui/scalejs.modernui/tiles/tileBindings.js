@@ -91,6 +91,23 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
             return {
                 html: this.brandBadge
             };
+        },
+        'panorama-tile-rating': function () {
+            var up = this.rating.votesUp,
+                down = this.rating.votesDown,
+                sum = (up + down) || 1;
+
+            return {
+                text: ((up - down >= 0 ? up / sum : down / sum) * 100).toFixed(0) + "%"
+            };
+        },
+        'panorama-tile-rating-icon': function () {
+            var up = this.rating.votesUp,
+                down = this.rating.votesDown
+
+            return {
+                css: (up - down >= 0 ? "icon-thumbs-up" : "icon-thumbs-down") + " fg-color-white",
+            };
         }
     };
 });

@@ -35,6 +35,20 @@
 </div>
 
 <div id="panorama_message_dialog_template">
+    <div style="padding:40px 0px" class="message-dialog bg-color-blue" data-bind="css: css">
+        <div style="margin:auto;width:400px">
+            <h2 class="fg-color-white" style="margin-bottom:20px" data-bind="text: title"></h2>
+             <!-- ko if: $data.contentTemplate -->
+                <div data-bind="template: { name: contentTemplate, data: content || {} }"></div>
+            <!-- /ko -->
+            <!-- ko foreach: buttons -->
+                <button class="popup-button" data-bind="click: action, text: content"></button>
+            <!-- /ko -->                
+        </div>
+    </div>
+</div>
+
+<div id="_panorama_message_dialog_template">
     <div class="panorama-message" data-bind="css: css">
         <div class="grid panorama-message-box" style="margin: auto">
             <div class="row panorama-message-title">
@@ -61,6 +75,22 @@
 </div>
 
 <div id="panorama_message_bar_template">
+    <div class="panorama-message" data-bind="css: css">
+        <div class="panorama-message-box">
+            <div style="margin:auto;width:400px">
+            <h2 class="fg-color-white" style="margin-bottom:20px" data-bind="text: title"></h2>
+             <!-- ko if: $data.contentTemplate -->
+                <div data-bind="template: { name: contentTemplate, data: content || {} }"></div>
+            <!-- /ko -->
+            <!-- ko foreach: buttons -->
+                <button class="popup-button" data-bind="click: action, text: content"></button>
+            <!-- /ko -->      
+            </div>          
+        </div>
+    </div>
+</div>
+
+<div id="_panorama_message_bar_template">
     <div class="panorama-message" data-bind="css: css">
         <div class="grid panorama-message-box">
             <div class="row panorama-message-content">

@@ -21,6 +21,7 @@ define([
 ) {
     /// <param name="ko" value="window.ko"/>
     'use strict';
+    
     var registerBindings = core.mvvm.registerBindings,
        registerTemplates = core.mvvm.registerTemplates,
        isObservable = ko.isObservable,
@@ -55,6 +56,10 @@ define([
                 //group the tiles into pages, if there is no "group by" specified, we make a single page...
                 function groupTilesToPages(tiles) {
 
+                    if (tiles === undefined) {
+                        return undefined
+                    }
+
                     if (!has(panorama, 'groupBy')) {
                         return [{ tiles: tiles }];
                     }
@@ -76,7 +81,13 @@ define([
                     if (isObservable(panorama.tiles)) {
                         tilesSubscription = panorama.tiles.subscribe(function (tiles) {
                             var pages = groupTilesToPages(unwrap(panorama.tiles));
-                            panorama.pages(pages);
+                            if (has(pages)) {
+                                if (pages.length > 0) {
+                                    panorama.pages(pages);
+                                } else {
+                                    //throw "Tiles array must not be empty."
+                                }
+                            }
                         });
 
                         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
@@ -164,7 +175,7 @@ define([
                 if (has(panorama.tiles()) && panorama.tiles().length > 0) {
                     $('.page-region-content').css('width', pageRegionWidth);
                 } else {
-                    $('.page-region-content').css('width', 'auto');
+                    $('.page-region-content').width(Math.max(120 + $('.tile-group').toArray().reduce(function (acc, x) { return acc + 80 + $(x).width(); }, 0), parseInt(pageRegionWidth)) + 80 + 'px');
                 }
                 $('.page-region-content').css('visibility', 'visible');
             };

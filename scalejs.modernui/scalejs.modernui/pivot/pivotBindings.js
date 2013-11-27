@@ -38,6 +38,8 @@ define(['scalejs!core'], function (core) {
 
             if (context.$data.contentHtml) {
                 binding.html = context.$data.contentHtml;
+            } else if (context.$data.content.length === 0) {
+                binding.html = context.$data.empty;
             } else {
                 binding.template = { name: context.$data.contentTemplate, foreach: context.$data.content };
             }

@@ -9,11 +9,14 @@
         <!-- /ko -->
         <!-- ko if: $data.showBrand -->
         <div class="brand" data-class="panorama-tile-brand-css">
+            <!-- ko if: brandDarken -->
+            <div style="background:black;height:35px;opacity:.3"></div>
+            <!-- /ko -->
             <!-- ko if: $data.brandIcon -->
             <img class="icon" src="#" data-class="panorama-tile-brand-icon" />
             <!-- /ko -->
             <!-- ko if: $data.brandName -->
-            <span class="name" data-class="panorama-tile-brand-name"></span>
+            <span class="name" style="margin-bottom:12px;font-size:16px" data-class="panorama-tile-brand-name"></span>
             <!-- /ko -->
             <!-- ko if: $data.brandHtml -->
             <p class="text" data-class="panorama-tile-brand-html"></p>
@@ -21,7 +24,12 @@
             <!-- ko if: $data.brandBadge -->
             <div class="badge" data-class="panorama-tile-brand-badge"></div>
             <!-- /ko -->
+            <!-- ko if: $data.showRating -->
+            <div style="position:absolute;right:0px;margin-right:50px;bottom:10px" data-class="panorama-tile-rating-icon"></div>
+            <div style="position:absolute;right:0px;margin-right:15px;bottom:10px" data-class="panorama-tile-rating"></div>
+            <!-- /ko -->
         </div>
+        
         <!-- /ko -->
     </div>
 </div>
