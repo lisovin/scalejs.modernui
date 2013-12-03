@@ -172,7 +172,7 @@ define([
                     pageRegionWidth = "auto";
                 }
 
-                if (has(panorama.tiles()) && panorama.tiles().length > 0) {
+                if (has(panorama.tiles) && panorama.tiles().length > 0) {
                     $('.page-region-content').css('width', pageRegionWidth);
                 } else {
                     $('.page-region-content').width(Math.max(120 + $('.tile-group').toArray().reduce(function (acc, x) { return acc + 80 + $(x).width(); }, 0), parseInt(pageRegionWidth)) + 80 + 'px');
