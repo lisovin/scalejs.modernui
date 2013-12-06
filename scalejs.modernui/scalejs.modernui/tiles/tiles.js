@@ -78,7 +78,8 @@ define([
                     layout: function (unitWidth) { return layout(tiles, element, unitWidth, b.pageHeight); }
                 },
                 afterRender: function () {
-                    width(layout(tiles, element, b.unitWidth, b.pageHieght));
+                    if(tiles)
+                        width(layout(tiles, element, b.unitWidth, b.pageHeight));
                 }
             };
         };

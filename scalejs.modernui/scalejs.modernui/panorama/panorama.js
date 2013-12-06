@@ -141,7 +141,7 @@ define([
     ) {
         var panorama = valueAccessor(),
             pages = panorama.pages,
-            unitWidth = panorama.unitWidth || 150,
+            unitWidth = panorama.unitWidth || 140,
             redoLayout,
             calculateWidth,
             result,
@@ -175,7 +175,11 @@ define([
                 if (has(panorama.tiles) && panorama.tiles().length > 0) {
                     $('.page-region-content').css('width', pageRegionWidth);
                 } else {
-                    $('.page-region-content').width(Math.max(120 + $('.tile-group').toArray().reduce(function (acc, x) { return acc + 80 + $(x).width(); }, 0), parseInt(pageRegionWidth)) + 80 + 'px');
+                    if (pageRegionWidth === "auto") {   //parseInt("auto") = NaN and messes up the layout
+                        $('.page-region-content').width(120 + $('.tile-group').toArray().reduce(function (acc, x) { return acc + 80 + $(x).width(); }, 0));
+                    } else {
+                        $('.page-region-content').width(Math.max(120 + $('.tile-group').toArray().reduce(function (acc, x) { return acc + 80 + $(x).width(); }, 0), parseInt(pageRegionWidth)) + 80 + 'px');
+                    }
                 }
                 $('.page-region-content').css('visibility', 'visible');
             };

@@ -10,8 +10,10 @@ define(['scalejs!core', 'knockout'], function (core, ko) {
 
     return {
         'panorama-tile': function (ctx) {
-            var unitWidth = ctx.$parentContext.$parentContext.$parent.unitWidth ||
-                    ctx.$parentContext.$parentContext.$parentContext.$parent.unitWidth,
+            var unitWidth = ctx.$parentContext.$parent.unitWidth ||
+                            ctx.$parentContext.$parentContext.$parent.unitWidth ||
+                            ctx.$parentContext.$parentContext.$parentContext.$parent.unitWidth ||
+                            140,
                 selectedTile = ctx.$parentContext.$parent.selectedTile,
                 tile = this,
                 css;
