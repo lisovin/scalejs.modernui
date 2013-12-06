@@ -24,6 +24,7 @@ define([
     
     var registerBindings = core.mvvm.registerBindings,
        registerTemplates = core.mvvm.registerTemplates,
+       merge = core.object.merge,
        isObservable = ko.isObservable,
        unwrap = ko.utils.unwrapObservable,
        toEnumerable = core.linq.enumerable.from,
